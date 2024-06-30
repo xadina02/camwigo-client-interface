@@ -17,7 +17,7 @@ import dummyJourneys from "../dummy/journeys";
 
 const MyHomeScreen = () => {
   const [journeys, setJourneys] = useState([]);
-  const [activeTab, setActiveTab] = useState("Home");
+//   const [activeTab, setActiveTab] = useState("Home");
 
   const handleSearch = async (searchParams) => {
     // Replace with your actual search endpoint

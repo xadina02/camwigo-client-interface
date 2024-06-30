@@ -12,16 +12,16 @@ import TicketCard from "../components/TicketCard";
 
 export default TicketScreen = () => {
   const [journeys, setJourneys] = useState(true);
-  const [activeTab, setActiveTab] = useState("Home");
+  // const [activeTab, setActiveTab] = useState("Ticket");
   return (
     <>
       <SafeAreaView
         style={styles.safeArea}
-        onRequestClose={() => setActiveTab("Home")}
+        onRequestClose={() => setActiveTab("Ticket")}
       >
         <StatusBar backgroundColor="#070C35" />
         <View style={styles.backgroundDiv}>
-          <Text style={styles.header}>Ticket History</Text>
+          <Text style={styles.header}>Your Ticket History</Text>
         </View>
         <View style={styles.container}>
           {journeys ? (

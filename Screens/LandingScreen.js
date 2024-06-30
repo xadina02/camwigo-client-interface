@@ -1,25 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import {
-  SafeAreaView,
-  Text,
-  Image,
-  ScrollView,
-  View,
   StyleSheet,
-  StatusBar,
+  BackHandler,
 } from "react-native";
-import SearchForm from "../components/SearchForm";
-import JourneyCard from "../components/JourneyCard";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import FloatingBottomTab from "../components/FloatingBottomTab";
-import Logo from "../assets/CamWiGo_logo.png";
-import ProfileIcon from "../assets/default_profile.png";
-import dummyJourneys from "../dummy/journeys";
 import TicketScreen from "./TicketScreen";
 import MyHomeScreen from "./MyHomeScreen";
 // import axios from 'axios'
 
 const LandingScreen = () => {
   const [activeTab, setActiveTab] = useState("Home");
+  const navigation = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (activeTab === "Tickets") {
+          setActiveTab("Home");
+          return true;
+        }
+        return false;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress
+      );
+
+      return () => backHandler.remove();
+    }, [activeTab])
+  );
 
   return (
     <>

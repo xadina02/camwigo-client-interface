@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { ScrollView, Text, View, SafeAreaView, StatusBar, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  ScrollView,
+  Text,
+  View,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+} from "react-native";
 import dummyTickets from "../dummy/tickets";
 import TicketCard from "../components/TicketCard";
-import FloatingBottomTab from '../components/FloatingBottomTab';
-import { useNavigation } from '@react-navigation/native'
 
-const TicketScreen = () => {
-  const navigation = useNavigation()
-
+export default TicketScreen = () => {
   const [journeys, setJourneys] = useState(true);
-  const [activeTab, setActiveTab] = useState('Ticket');
-  useEffect(() => {
-    setActiveTab('Ticket');
-  }, [{activeTab}]);
+  const [activeTab, setActiveTab] = useState("Home");
   return (
     <>
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView
+        style={styles.safeArea}
+        onRequestClose={() => setActiveTab("Home")}
+      >
         <StatusBar backgroundColor="#070C35" />
         <View style={styles.backgroundDiv}>
           <Text style={styles.header}>Ticket History</Text>
@@ -37,7 +40,6 @@ const TicketScreen = () => {
           )}
         </View>
       </SafeAreaView>
-      <FloatingBottomTab activeTab={activeTab} onTabPress={setActiveTab} />
     </>
   );
 };
@@ -78,5 +80,3 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
 });
-
-export default TicketScreen

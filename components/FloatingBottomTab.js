@@ -1,22 +1,20 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from "@react-navigation/native";
 
 const FloatingBottomTab = ({ activeTab, onTabPress }) => {
-  const navigation = useNavigation()
   return (
     <View style={styles.tabContainer}>
       <TouchableOpacity 
         style={[styles.tabButton, activeTab === 'Home' ? styles.activeTab : {}]} 
-        onPress={() => { onTabPress('Home'); navigation.navigate("LandingScreen") }}
+        onPress={() => onTabPress('Home')}
       >
         <FontAwesome name="home" size={24} color={activeTab === 'Home' ? "#070C35" : "white"} />
         {activeTab === 'Home' && <Text style={[styles.tabLabel, activeTab === 'Home' ? styles.activeTabLabel : {}]}>Home</Text>}
       </TouchableOpacity>
       <TouchableOpacity 
         style={[styles.tabButton, activeTab === 'Ticket' ? styles.activeTab : {}]} 
-        onPress={() => { onTabPress('Ticket'); navigation.navigate("TicketScreen")}}
+        onPress={() => onTabPress('Ticket')}
       >
         <FontAwesome name="ticket" size={24} color={activeTab === 'Ticket' ? "#070C35" : "white"} />
         {activeTab === 'Ticket' && <Text style={[styles.tabLabel, activeTab === 'Ticket' ? styles.activeTabLabel : {}]}>Ticket</Text>}

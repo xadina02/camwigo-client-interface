@@ -10,25 +10,58 @@ import {
 } from "react-native";
 import SearchForm from "../components/SearchForm";
 import JourneyCard from "../components/JourneyCard";
-import FloatingBottomTab from "../components/FloatingBottomTab";
 import Logo from "../assets/CamWiGo_logo.png";
 import ProfileIcon from "../assets/default_profile.png";
 import dummyJourneys from "../dummy/journeys";
-import TicketScreen from "./TicketScreen";
-import MyHomeScreen from "./MyHomeScreen";
 // import axios from 'axios'
 
-const LandingScreen = () => {
+const MyHomeScreen = () => {
+  const [journeys, setJourneys] = useState([]);
   const [activeTab, setActiveTab] = useState("Home");
+
+  const handleSearch = async (searchParams) => {
+    // Replace with your actual search endpoint
+    const response = await axios.get("https://api.example.com/search", {
+      params: searchParams,
+    });
+    setJourneys(response.data);
+  };
 
   return (
     <>
-      {activeTab === "Home" ? (
-        <MyHomeScreen />
-      ) : (
-        <TicketScreen />
-      )}
-      <FloatingBottomTab activeTab={activeTab} onTabPress={setActiveTab} />
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar backgroundColor="#070C35" />
+        <View style={styles.backgroundDiv}>
+          <View style={styles.another}>
+            <View style={styles.header}>
+              <View>
+                <View style={styles.mainDiv}>
+                  <Image source={Logo} style={styles.logo} />
+                  <Text style={styles.headerText}>CamWiGo</Text>
+                </View>
+                <Text style={styles.headerSubText}>
+                  No stress, travel easy..
+                </Text>
+              </View>
+              <Image style={styles.profileIcon} source={ProfileIcon}></Image>
+            </View>
+            <View>
+              <SearchForm onSearch={handleSearch} />
+            </View>
+          </View>
+        </View>
+        <View style={styles.container}>
+          <Text style={styles.topic}>Recent popular journeys</Text>
+          <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={false}
+          >
+            {dummyJourneys.map((journey) => (
+              <JourneyCard key={journey.id} journey={journey} />
+            ))}
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     </>
   );
 };
@@ -99,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LandingScreen;
+export default MyHomeScreen;

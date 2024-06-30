@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native'
+import React, { useState } from 'react';
+import FloatingBottomTab from './components/FloatingBottomTab';
+import LandingScreen from './Screens/LandingScreen'
+import TicketScreen from './Screens/TicketScreen'
+import ListScreen from './Screens/ListScreen'
+import ReservationScreen from './Screens/ReservationScreen'
+import TicketDetailsScreen from './Screens/TicketDetailsScreen'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+
+const Stack = createNativeStackNavigator()
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    return (
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="LandingScreen" screenOptions={{
+                headerShown: false
+            }}>
+                <Stack.Screen name="LandingScreen" component={LandingScreen}/>
+                <Stack.Screen name="TicketScreen" component={TicketScreen}/>
+                <Stack.Screen name="ListScreen" component={ListScreen}/>
+                <Stack.Screen name="ReservationScreen" component={ReservationScreen}/>
+                <Stack.Screen name="TicketDetailsScreen" component={TicketDetailsScreen}/>
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

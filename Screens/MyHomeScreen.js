@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
   profileIcon: {
     width: 50,
     height: 50,
+    borderRadius: 25,
   },
   scrollView: {
     marginTop: 7,

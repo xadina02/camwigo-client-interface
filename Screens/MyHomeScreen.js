@@ -17,7 +17,7 @@ import dummyJourneys from "../dummy/journeys";
 
 const MyHomeScreen = () => {
   const [journeys, setJourneys] = useState([]);
-//   const [activeTab, setActiveTab] = useState("Home");
+  //   const [activeTab, setActiveTab] = useState("Home");
 
   const handleSearch = async (searchParams) => {
     // Replace with your actual search endpoint
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     color: "#666",
   },
   backgroundDiv: {
-    height: "38%",
+    height: "36%",
   },
   another: {
     height: "60%",
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   scrollView: {
-    marginTop: 7,
-    height: "51.2%",
+    marginTop: 3,
+    height: "53.8%",
   },
 });
 

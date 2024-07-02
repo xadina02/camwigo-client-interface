@@ -73,11 +73,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   separator: {
-    marginBottom: 5,
+    marginBottom: 4,
   },
   scrollView: {
-    marginTop: 7,
-    height: '77%',
+    marginTop: -4,
+    height: '81.45%',
   },
   topic: {
     fontSize: 25,

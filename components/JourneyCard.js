@@ -16,7 +16,7 @@ const JourneyCard = ({ journey }) => {
         <Text style={styles.type}>{journey.type.toUpperCase()}</Text>
       </View>
 
-      <JourneyFleetDetails journey={journey} seating={true}/>
+      <JourneyFleetDetails journey={journey} seating={true} status={false} none={false}/>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ReservationScreen", {
                 journey: journey
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 10,
-    marginBottom: 7,
+    marginBottom: 6,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -48,21 +48,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 5,
+    marginBottom: 8,
   },
   vehicleInfo: {
     flexDirection: "row",
     alignItems: "center",
   },
   vehicleIcon: {
-    width: 24,
-    height: 24,
+    width: 23,
+    height: 23,
     marginRight: 8,
   },
   vehicleName: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     color: "#070C35",
+    marginLeft: -6,
   },
   type: {
     fontSize: 14,

@@ -46,7 +46,7 @@ const DateFilterCard = () => {
       <View style={styles.header}>
         <Text style={styles.headerText}>Filter By Date</Text>
         <TouchableOpacity>
-          <MaterialIcons name="calendar-today" size={24} color="#333" />
+          <MaterialIcons name="calendar-today" size={21} color="#333" />
         </TouchableOpacity>
       </View>
       <Text style={styles.subHeader}>Day</Text>
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginBottom: 3,
+    marginTop: -5,
   },
   headerText: {
     fontSize: 18,
@@ -90,16 +90,17 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   subHeader: {
-    fontSize: 14,
+    fontSize: 13,
+    fontWeight: 'bold',
     color: '#666',
-    marginBottom: 3,
+    marginBottom: 1,
   },
   dateList: {
     flexDirection: 'row',
   },
   dateButton: {
     backgroundColor: '#E4E6F6',
-    paddingVertical: 5,
+    paddingVertical: 0,
     paddingHorizontal: 15,
     borderRadius: 10,
     borderWidth: 1,

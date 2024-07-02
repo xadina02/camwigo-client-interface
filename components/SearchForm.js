@@ -66,7 +66,7 @@ const SearchForm = ({ onSearch }) => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 8,
-    paddingHorizontal: 20,
+    paddingHorizontal: 22,
     backgroundColor: '#fff',
     borderRadius: 15,
     marginBottom: 10,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     alignItems: 'center',
-    marginVertical: 4
+    marginVertical: 3,
   },
   buttonText: {
     color: '#fff',
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
   inputs: {
     paddingVertical: 2,
     paddingHorizontal: 12,
-    borderRadius: 10,
+    borderRadius: 8,
     borderWidth: 1,
     borderColor: "#070C35",
     alignItems: 'center',
-    marginVertical: 4,
+    marginVertical: 3,
   },
   period: {
     flexDirection: "row",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   Text,
@@ -23,6 +23,7 @@ import Delimiter from "../assets/delimiter.png";
 const ReservationScreen = ({ route }) => {
   const navigation = useNavigation();
   const { journey } = route.params;
+  const [selectedSeats, setSelectedSeats] = useState([]);
 
   // Function to split seats into two columns layout
   const getSeatRows = (seats) => {
@@ -34,6 +35,17 @@ const ReservationScreen = ({ route }) => {
   };
 
   const seatRows = getSeatRows(dummySeats);
+
+  // Handle seat selection
+  const handleSeatSelect = (seatNumber) => {
+    setSelectedSeats((prevSelectedSeats) => {
+      if (prevSelectedSeats.includes(seatNumber)) {
+        return prevSelectedSeats.filter((seat) => seat !== seatNumber);
+      } else {
+        return [...prevSelectedSeats, seatNumber];
+      }
+    });
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -51,7 +63,12 @@ const ReservationScreen = ({ route }) => {
           </TouchableOpacity>
           <Text style={styles.header}>Make Reservation</Text>
           <View style={styles.fleetDetails}>
-            <JourneyFleetDetails journey={journey} seating={true}/>
+            <JourneyFleetDetails
+              journey={journey}
+              seating={true}
+              status={false}
+              none={false}
+            />
           </View>
         </View>
       </View>
@@ -83,9 +100,17 @@ const ReservationScreen = ({ route }) => {
                     <SeatCard
                       key={seat.seatNumber}
                       seatIcon={
-                        seat.isReserved ? ReservedIcon : AvailableIcon
+                        seat.isReserved
+                          ? ReservedIcon
+                          : selectedSeats.includes(seat.seatNumber)
+                          ? SelectedIcon
+                          : AvailableIcon
                       }
                       seatNumber={seat.seatNumber}
+                      isReserved={seat.isReserved}
+                      onSeatSelect={() =>
+                        !seat.isReserved && handleSeatSelect(seat.seatNumber)
+                      }
                     />
                   ))}
                 </View>
@@ -94,9 +119,17 @@ const ReservationScreen = ({ route }) => {
                     <SeatCard
                       key={seat.seatNumber}
                       seatIcon={
-                        seat.isReserved ? ReservedIcon : AvailableIcon
+                        seat.isReserved
+                          ? ReservedIcon
+                          : selectedSeats.includes(seat.seatNumber)
+                          ? SelectedIcon
+                          : AvailableIcon
                       }
                       seatNumber={seat.seatNumber}
+                      isReserved={seat.isReserved}
+                      onSeatSelect={() =>
+                        !seat.isReserved && handleSeatSelect(seat.seatNumber)
+                      }
                     />
                   ))}
                 </View>
@@ -104,7 +137,14 @@ const ReservationScreen = ({ route }) => {
             ))}
           </ScrollView>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() =>
+            navigation.navigate("PaymentScreen", {
+              journey: journey,
+            })
+          }
+        >
           <Text style={styles.buttonText}>
             <Image source={ReserveIcon} /> Reserve
           </Text>
@@ -152,7 +192,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   fleetDetails: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
     padding: 10,
     marginTop: 25,
     shadowColor: "#000",
@@ -173,9 +213,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   aboutSeats: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#fff",
     padding: 10,
-    marginBottom: 15,
+    marginBottom: 10,
+    marginTop: 5,
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 2 },
     shadowOpacity: 0.1,

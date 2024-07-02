@@ -47,7 +47,7 @@ const TicketDetailsScreen = ({ route }) => {
           </View>
           <View style={styles.divider} />
           <View style={styles.fleetDetails}>
-            <JourneyFleetDetails journey={journey} seating={false} />
+            <JourneyFleetDetails journey={journey} seating={false} status={false} none={true} />
           </View>
           <View style={styles.divider} />
           <View style={styles.statusContainer}>

@@ -2,9 +2,13 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 // SeatCard Component
-const SeatCard = ({ seatIcon, seatNumber }) => {
+const SeatCard = ({ seatIcon, seatNumber, isReserved, onSeatSelect }) => {
   return (
-    <TouchableOpacity style={styles.card} value={seatNumber}>
+    <TouchableOpacity 
+      style={[styles.card, isReserved && styles.reservedCard]} 
+      onPress={onSeatSelect} 
+      disabled={isReserved}
+    >
       <View style={styles.numberContainer}>
         <Text style={styles.seatNumber}>{seatNumber}</Text>
       </View>

@@ -5,6 +5,7 @@ import LandingScreen from './Screens/LandingScreen'
 import ListScreen from './Screens/ListScreen'
 import ReservationScreen from './Screens/ReservationScreen'
 import TicketDetailsScreen from './Screens/TicketDetailsScreen'
+import PaymentScreen from './Screens/PaymentScreen'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 const Stack = createNativeStackNavigator()
@@ -18,6 +19,7 @@ export default function App() {
                 <Stack.Screen name="LandingScreen" component={LandingScreen}/>
                 <Stack.Screen name="ListScreen" component={ListScreen}/>
                 <Stack.Screen name="ReservationScreen" component={ReservationScreen}/>
+                <Stack.Screen name="PaymentScreen" component={PaymentScreen}/>
                 <Stack.Screen name="TicketDetailsScreen" component={TicketDetailsScreen}/>
             </Stack.Navigator>
         </NavigationContainer>

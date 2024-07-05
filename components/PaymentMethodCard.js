@@ -5,12 +5,11 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import Delimiter from "../assets/delimiterForm.png";
 
-// Define the PaymentMethodButton component
 const PaymentMethodCard = ({
   imageSource,
   paymentMethodName,
@@ -20,7 +19,6 @@ const PaymentMethodCard = ({
   const [accountNumber, setAccountNumber] = useState("");
   const [amount, setAmount] = useState("");
 
-  // Handle form submission
   const handlePay = () => {
     console.log("Account Number:", accountNumber);
     console.log("Amount to Pay:", amount);
@@ -40,7 +38,10 @@ const PaymentMethodCard = ({
       </TouchableOpacity>
 
       {isSelected && (
-        <>
+        <ScrollView
+          contentContainerStyle={styles.scrollViewContent}
+          nestedScrollEnabled={true} // This ensures that scrolling inside the card works independently
+        >
           <Image source={Delimiter} style={styles.delimiter} />
           <View style={styles.form}>
             <Text style={styles.label}>Account number</Text>
@@ -49,6 +50,7 @@ const PaymentMethodCard = ({
               value={accountNumber}
               onChangeText={setAccountNumber}
               placeholder="Enter account number"
+              keyboardType="numeric"
             />
             <Text style={styles.label}>Amount to pay</Text>
             <TextInput
@@ -62,13 +64,12 @@ const PaymentMethodCard = ({
               <Text style={styles.payButtonText}>Pay</Text>
             </TouchableOpacity>
           </View>
-        </>
+        </ScrollView>
       )}
     </View>
   );
 };
 
-// Define the styles
 const styles = StyleSheet.create({
   container: {
     margin: 10,
@@ -81,10 +82,8 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOffset: { width: 0, height: 2 },
     elevation: 3,
-    // backgroundColor: "bisque",
   },
   card: {
-    // flex: 1,
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
@@ -125,13 +124,13 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 10,
     marginBottom: 15,
   },
   payButton: {
-    backgroundColor: "#000080",
-    borderRadius: 5,
+    backgroundColor: "#070C35",
+    borderRadius: 20,
     paddingVertical: 10,
     alignItems: "center",
   },
@@ -144,6 +143,10 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 3,
     width: "100%",
+  },
+  scrollViewContent: {
+    paddingVertical: 10,
+    flexGrow: 1,
   },
 });
 

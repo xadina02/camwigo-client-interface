@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   backgroundDiv: {
-    height: '8%',
+    height: '7%',
     backgroundColor: '#070C35',
     justifyContent: 'center',
     alignItems: 'center',
@@ -76,8 +76,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   scrollView: {
-    marginTop: -4,
-    height: '81.45%',
+    marginTop: 4,
+    height: '81.5%',
   },
   topic: {
     fontSize: 25,

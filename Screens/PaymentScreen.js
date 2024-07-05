@@ -119,7 +119,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     alignSelf: 'center',
-    marginBottom: 20
+    marginBottom: 20,
+    color: '#070C35'
   },
 });
 

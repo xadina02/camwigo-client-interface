@@ -13,6 +13,7 @@ import BackArrow from "../assets/arrow-circle-left.png";
 import JourneyFleetDetails from "../components/JourneyFleetDetails";
 import DownloadIcon from "../assets/download.png";
 import ProfileIcon from "../assets/default_profile.png";
+import DashedLine from "../assets/dashed-line.png";
 import QrCode from "../assets/qr_code.png"; // Temporal
 
 const TicketDetailsScreen = ({ route }) => {
@@ -45,11 +46,24 @@ const TicketDetailsScreen = ({ route }) => {
               <Text style={styles.userType}>{journey.userType}</Text>
             </View>
           </View>
-          <View style={styles.divider} />
-          <View style={styles.fleetDetails}>
-            <JourneyFleetDetails journey={journey} seating={false} status={false} none={true} />
+          <View style={styles.breaker}>
+            <View style={styles.ticketCut}></View>
+            <Image source={DashedLine} style={styles.delimiter} />
+            <View style={styles.ticketCut}></View>
           </View>
-          <View style={styles.divider} />
+          <View style={styles.fleetDetails}>
+            <JourneyFleetDetails
+              journey={journey}
+              seating={false}
+              status={false}
+              none={true}
+            />
+          </View>
+          <View style={styles.breaker}>
+            <View style={styles.ticketCut}></View>
+            <Image source={DashedLine} style={styles.delimiter} />
+            <View style={styles.ticketCut}></View>
+          </View>
           <View style={styles.statusContainer}>
             <View style={styles.statusBox}>
               <Text style={styles.statusLabel}>Status</Text>
@@ -88,7 +102,7 @@ const TicketDetailsScreen = ({ route }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#D9DBE7",
   },
   backgroundDiv: {
     height: "17%",
@@ -151,11 +165,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#A1A3AE",
   },
-  divider: {
-    height: 1,
-    backgroundColor: "#00103D",
-    width: "100%",
-  },
   fleetDetails: {
     backgroundColor: "#ffffff",
     padding: 10,
@@ -166,6 +175,19 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 7,
     borderRadius: 20,
+  },
+  ticketCut: {
+    backgroundColor: '#D9DBE7',
+    width: 25,
+    height: 25,
+    borderRadius: 15,
+  },
+  breaker: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -10,
+    marginBottom: -5,
   },
   button: {
     backgroundColor: "#00103D",
@@ -184,11 +206,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#ffffff",
     height: "92%",
-    shadowColor: "#000",
-    shadowOffset: { width: 4, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 7,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 4, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 7,
     borderRadius: 20,
   },
   statusContainer: {
@@ -269,6 +291,9 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     marginRight: 10,
+  },
+  delimiter: {
+    width: "98%",
   },
 });
 

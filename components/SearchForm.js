@@ -16,44 +16,7 @@ import OriginIcon from "../assets/direct-down.png";
 import DestinationIcon from "../assets/location.png";
 import ScheduleIcon from "../assets/clock2.png";
 import DateIcon from "../assets/calendar.png";
-
-const dummyData = {
-  origins: [
-    { label: "Douala", value: "Douala" },
-    { label: "Yaounde", value: "Yaounde" },
-    // Add more towns
-  ],
-  destinations: {
-    Douala: [
-      { label: "Bamenda", value: "Bamenda" },
-      { label: "Buea", value: "Buea" },
-      // Add more destinations
-    ],
-    Yaounde: [
-      { label: "Bafoussam", value: "Bafoussam" },
-      { label: "Garoua", value: "Garoua" },
-      // Add more destinations
-    ],
-  },
-  schedules: {
-    Bamenda: [
-      { label: "Morning", value: "Morning" },
-      { label: "Evening", value: "Evening" },
-      // Add more schedules
-    ],
-    Buea: [
-      { label: "Afternoon", value: "Afternoon" },
-      { label: "Night", value: "Night" },
-      // Add more schedules
-    ],
-    // Add more schedules for other destinations
-  },
-  dates: {
-    Morning: [new Date("2024-07-21"), new Date("2024-07-22")],
-    Evening: [new Date("2024-07-23"), new Date("2024-07-24")],
-    // Add more dates for other schedules
-  },
-};
+import dummyData from '../dummy/tripDefinition'
 
 const SearchForm = ({ onSearch }) => {
   const navigation = useNavigation();
@@ -187,6 +150,7 @@ const SearchForm = ({ onSearch }) => {
             data={filteredData}
             renderItem={renderModalItem}
             keyExtractor={(item) => item.value}
+            style={styles.modalList}
           />
         </View>
       </View>
@@ -308,11 +272,15 @@ const styles = StyleSheet.create({
   elementLabel: {
     marginLeft: 10,
     fontSize: 14,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
   },
   elementIcon: {
     width: 14,
     height: 15,
+  },
+  modalList: {
+    height: '40%',
+    // flex: 1
   },
   period: {
     flexDirection: "row",

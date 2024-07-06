@@ -65,13 +65,10 @@ const DateFilterCard = () => {
 const styles = StyleSheet.create({
   card: {
     backgroundColor: '#E4E6F6',
-    // padding: 15,
     paddingVertical: 10,
     paddingHorizontal: 29,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    // marginHorizontal: 20,
-    // marginVertical: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

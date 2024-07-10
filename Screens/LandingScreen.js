@@ -16,9 +16,6 @@ const LandingScreen = ({ route }) => {
     }
   }, [route?.params]);
 
-  console.log("The props value: " + route?.params?.myActiveTab);
-  console.log("The effected value: " + activeTab);
-
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {

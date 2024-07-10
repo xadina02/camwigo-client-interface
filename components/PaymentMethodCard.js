@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Delimiter from "../assets/delimiterForm.png";
 
 const PaymentMethodCard = ({
@@ -16,6 +17,8 @@ const PaymentMethodCard = ({
   isSelected,
   onCardSelect,
 }) => {
+  const navigation = useNavigation();
+
   const [accountNumber, setAccountNumber] = useState("");
   const [amount, setAmount] = useState("");
 
@@ -60,7 +63,11 @@ const PaymentMethodCard = ({
               placeholder="Enter amount"
               keyboardType="numeric"
             />
-            <TouchableOpacity style={styles.payButton} onPress={handlePay}>
+            <TouchableOpacity
+              style={styles.payButton}
+              // onPress={openModal}
+              onPress={() => navigation.navigate("RegistrationScreen")}
+            >
               <Text style={styles.payButtonText}>Pay</Text>
             </TouchableOpacity>
           </View>

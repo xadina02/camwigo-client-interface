@@ -9,18 +9,20 @@ import {
   TextInput,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from "react-native";
-import DatePicker from "react-native-date-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import OriginIcon from "../assets/direct-down.png";
 import DestinationIcon from "../assets/location.png";
 import ScheduleIcon from "../assets/clock2.png";
 import DateIcon from "../assets/calendar.png";
-import dummyData from '../dummy/tripDefinition'
+import dummyData from "../dummy/tripDefinition";
 
 const SearchForm = ({ onSearch }) => {
   const navigation = useNavigation();
 
+  // State management
   const [origins, setOrigins] = useState(dummyData.origins);
   const [destinations, setDestinations] = useState([]);
   const [schedules, setSchedules] = useState([]);
@@ -107,7 +109,7 @@ const SearchForm = ({ onSearch }) => {
     setModalVisible(false);
   };
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (event, date) => {
     setSelectedDate(date);
     setOpenDatePicker(false);
   };
@@ -157,6 +159,15 @@ const SearchForm = ({ onSearch }) => {
     </Modal>
   );
 
+  // Calculate minimum and maximum date
+  const minDate = dates.length ? new Date(Math.min(...dates)) : new Date();
+  const maxDate = dates.length ? new Date(Math.max(...dates)) : new Date();
+
+  // Function to check if a date is enabled (selectable)
+  const isDateEnabled = (date) => {
+    return dates.some((availableDate) => availableDate.getTime() === date.getTime());
+  };
+
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator size="large" color="#00103D" />}
@@ -166,8 +177,10 @@ const SearchForm = ({ onSearch }) => {
         style={styles.inputs}
         onPress={() => openModal("origin")}
       >
-        <Image source={OriginIcon} style={styles.elementIcon}/>
-        <Text style={styles.elementLabel}>{selectedOrigin ? selectedOrigin : "Select Origin"}</Text>
+        <Image source={OriginIcon} style={styles.elementIcon} />
+        <Text style={styles.elementLabel}>
+          {selectedOrigin ? selectedOrigin : "Select Origin"}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -175,7 +188,7 @@ const SearchForm = ({ onSearch }) => {
         onPress={() => openModal("destination")}
         disabled={!selectedOrigin}
       >
-        <Image source={DestinationIcon} style={styles.elementIcon}/>
+        <Image source={DestinationIcon} style={styles.elementIcon} />
         <Text style={styles.elementLabel}>
           {selectedDestination ? selectedDestination : "Select Destination"}
         </Text>
@@ -187,8 +200,10 @@ const SearchForm = ({ onSearch }) => {
           onPress={() => openModal("schedule")}
           disabled={!selectedDestination}
         >
-        <Image source={ScheduleIcon} style={styles.elementIcon}/>
-          <Text style={styles.elementLabel}>{selectedSchedule ? selectedSchedule : "Pick Schedule"}</Text>
+          <Image source={ScheduleIcon} style={styles.elementIcon} />
+          <Text style={styles.elementLabel}>
+            {selectedSchedule ? selectedSchedule : "Pick Schedule"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -196,34 +211,35 @@ const SearchForm = ({ onSearch }) => {
           onPress={() => setOpenDatePicker(true)}
           disabled={!selectedSchedule}
         >
-        <Image source={DateIcon} style={styles.elementIcon}/>
+          <Image source={DateIcon} style={styles.elementIcon} />
           <Text style={styles.elementLabel}>
             {selectedDate ? selectedDate.toDateString() : "Choose Date"}
           </Text>
         </TouchableOpacity>
       </View>
 
-      <DatePicker
-        modal
-        open={openDatePicker}
-        date={selectedDate || new Date()}
-        onConfirm={handleDateChange}
-        onCancel={() => setOpenDatePicker(false)}
-        minimumDate={dates.length > 0 ? new Date(dates[0]) : new Date()}
-        maximumDate={
-          dates.length > 0 ? new Date(dates[dates.length - 1]) : new Date()
-        }
-        mode="date"
-      />
+      {openDatePicker && (
+        <DateTimePicker
+          testID="datePicker"
+          value={selectedDate || new Date()}
+          mode="date"
+          onChange={handleDateChange}
+          minimumDate={minDate}
+          maximumDate={maxDate}
+          enabledDates={(date) => isDateEnabled(date)}
+        />
+      )}
 
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ListScreen", {
-            origin: selectedOrigin,
-            destination: selectedDestination,
-            date: selectedDate ? selectedDate.toDateString() : "",
-            time: selectedSchedule,
-          })
+        onPress={
+          selectedDate &&
+          (() =>
+            navigation.navigate("ListScreen", {
+              origin: selectedOrigin,
+              destination: selectedDestination,
+              date: selectedDate ? selectedDate.toDateString() : "",
+              time: selectedSchedule,
+            }))
         }
         style={styles.button}
       >
@@ -264,7 +280,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#070C35",
+    borderColor: "#999999",
     alignItems: "left",
     flexDirection: "row",
     marginVertical: 3,
@@ -279,7 +295,7 @@ const styles = StyleSheet.create({
     height: 15,
   },
   modalList: {
-    height: '40%',
+    height: "40%",
     // flex: 1
   },
   period: {

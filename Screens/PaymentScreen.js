@@ -63,7 +63,7 @@ const PaymentScreen = ({ route }) => {
             isSelected={selectedCard === "Orange Money"}
             onCardSelect={() => handleCardSelect("Orange Money")}
           />
-          
+
           <PaymentMethodCard
             imageSource={VisaLogo}
             paymentMethodName="Visa Card Pay"
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 25,
     height: "90%",
-    position: 'relative',
+    position: "relative",
     // marginTop: -(0.77 * StatusBar.currentHeight),
     backgroundColor: "#fff",
     //backgroundColor: "red",

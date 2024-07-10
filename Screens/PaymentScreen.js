@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
 import PaymentMethodCard from "../components/PaymentMethodCard";
 import BackArrow from "../assets/arrow-circle-left.png";
@@ -20,10 +21,21 @@ import VisaLogo from "../assets/visa.png";
 const PaymentScreen = ({ route }) => {
   const navigation = useNavigation();
   const { journey } = route.params;
+  const [modalVisible, setModalVisible] = useState(false);
+
   const [selectedCard, setSelectedCard] = useState(null);
 
   const handleCardSelect = (cardName) => {
     setSelectedCard((prevCard) => (prevCard === cardName ? null : cardName));
+  };
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    navigation.navigate("LandingScreen", { activeTab: "Ticket" });
   };
 
   return (
@@ -72,6 +84,15 @@ const PaymentScreen = ({ route }) => {
           />
         </ScrollView>
       </View>
+
+      <CustomModal
+        visible={modalVisible}
+        onClose={closeModal}
+        // onClose={() => navigation.navigate("RegistrationScreen")}
+        icon={require("../assets/success-tick.png")}
+        headerText="Success"
+        bodyText="Your payment was successfully received."
+      />
     </SafeAreaView>
   );
 };

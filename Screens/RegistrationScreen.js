@@ -8,6 +8,7 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
@@ -17,13 +18,24 @@ const RegistrationScreen = () => {
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [nin, setNin] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+
   const openModal = () => {
     setModalVisible(true);
   };
 
   const closeModal = () => {
     setModalVisible(false);
-    // navigation.navigate("RegistrationScreen")
+    navigation.navigate("LandingScreen", { myActiveTab: "Ticket" });
+  };
+
+  const handleContinue = () => {
+    // Perform form validation and submission logic here
+    openModal();
   };
 
   return (
@@ -45,11 +57,59 @@ const RegistrationScreen = () => {
       </View>
       <View style={styles.container}>
         <View style={styles.ticketBox}>
-          <ScrollView showsVerticalScrollIndicator={false}></ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.topper}>
+              <Image
+                source={require("../assets/CamWiGo_logo.png")} // Replace with your logo
+                style={styles.logo}
+              />
+              <View style={styles.topperText}>
+                <Text style={styles.title}>CamWiGo</Text>
+                <Text style={styles.subHeader}>No stress, travel easy..</Text>
+              </View>
+            </View>
+            <Text style={styles.label}>First Name <Text style={styles.star}>*</Text></Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter first name"
+              value={firstName}
+              onChangeText={setFirstName}
+            />
+            <Text style={styles.label}>Last Name <Text style={styles.star}>*</Text></Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter last name"
+              value={lastName}
+              onChangeText={setLastName}
+            />
+            <Text style={styles.label}>National Identification Number <Text style={styles.star}>*</Text></Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter NIN (as it is on your national identity card)"
+              value={nin}
+              onChangeText={setNin}
+            />
+            <Text style={styles.label}>Phone Number <Text style={styles.star}>*</Text></Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter tel"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+              keyboardType="phone-pad"
+            />
+            <Text style={styles.label}>Email</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Enter email address"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+            />
+            <TouchableOpacity style={styles.button} onPress={handleContinue}>
+              <Text style={styles.buttonText}>Continue ➔</Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-        <TouchableOpacity style={styles.button} onPress={openModal}>
-          <Text style={styles.buttonText}>Continue ➔</Text>
-        </TouchableOpacity>
       </View>
 
       <CustomModal
@@ -104,161 +164,65 @@ const styles = StyleSheet.create({
     marginTop: -(2.1 * StatusBar.currentHeight),
     justifyContent: "space-between",
   },
-  profileContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    height: "15%",
-    justifyContent: "left",
-    padding: 25,
-  },
-  profileImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  userInfo: {
-    flexDirection: "column",
-    marginLeft: 10,
-  },
-  userName: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  userType: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#A1A3AE",
-  },
-  fleetDetails: {
+  ticketBox: {
+    padding: 20,
     backgroundColor: "#ffffff",
-    padding: 10,
-    marginVertical: 15,
-    shadowColor: "#000",
-    shadowOffset: { width: 4, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 7,
+    height: "99%",
     borderRadius: 20,
   },
-  ticketCut: {
-    backgroundColor: "#D9DBE7",
-    width: 25,
-    height: 25,
-    borderRadius: 15,
-  },
-  breaker: {
+  topper: {
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
-    marginTop: -10,
-    marginBottom: -5,
+    marginTop: '10%',
+    marginBottom: '7%',
+  },
+  topperText: {
+    marginLeft: '5%',
+  },
+  title: {
+    // textAlign: "center",
+    color: "#000",
+    fontSize: 30,
+    fontWeight: "900",
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginVertical: 5,
+  },
+  input: {
+    height: 40,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    // alignSelf: "center",
+    marginBottom: 10,
+  },
+  subHeader: {
+    // textAlign: "center",
+    color: "#000",
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  star: {
+    color: '#FF0B45',
   },
   button: {
     backgroundColor: "#00103D",
     padding: 12,
     borderRadius: 20,
     alignItems: "center",
+    marginTop: '5%',
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
-  },
-  label: {
-    fontWeight: "bold",
-  },
-  ticketBox: {
-    padding: 10,
-    backgroundColor: "#ffffff",
-    height: "92%",
-    // shadowColor: "#000",
-    // shadowOffset: { width: 4, height: 2 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 4,
-    // elevation: 7,
-    borderRadius: 20,
-  },
-  statusContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-    marginVertical: 10,
-    paddingHorizontal: 20,
-  },
-  statusBox: {
-    alignItems: "center",
-    marginRight: 5,
-  },
-  statusLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 5,
-  },
-  statusValue: {
-    fontSize: 16,
-    color: "green",
-    fontWeight: "bold",
-  },
-  positionBox: {
-    // flex: 1,
-    alignItems: "center",
-    marginLeft: 5,
-  },
-  positionLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: 5,
-  },
-  positionValue: {
-    fontSize: 16,
-    color: "blue",
-    fontWeight: "bold",
-  },
-  type: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#18BA82",
-    backgroundColor: "#E0F4EC",
-    paddingHorizontal: 30,
-    paddingVertical: 6,
-    borderRadius: 5,
-  },
-  status: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#FF0B45",
-    backgroundColor: "#FCB9BD",
-    paddingHorizontal: 30,
-    paddingVertical: 6,
-    borderRadius: 5,
-  },
-  position: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#070C35",
-    backgroundColor: "#ABB5FE",
-    paddingHorizontal: 30,
-    paddingVertical: 2,
-    borderRadius: 5,
-  },
-  qrCodeContainer: {
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  qrCode: {
-    width: 280,
-    height: 280,
-  },
-  downloadIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 10,
-  },
-  delimiter: {
-    width: "98%",
   },
 });
 

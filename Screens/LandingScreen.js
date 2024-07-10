@@ -1,22 +1,28 @@
-import React, { useState, useCallback } from "react";
-import {
-  StyleSheet,
-  BackHandler,
-} from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { StyleSheet, BackHandler } from "react-native";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import FloatingBottomTab from "../components/FloatingBottomTab";
 import TicketScreen from "./TicketScreen";
 import MyHomeScreen from "./MyHomeScreen";
 // import axios from 'axios'
 
-const LandingScreen = () => {
-  const [activeTab, setActiveTab] = useState("Home");
+const LandingScreen = ({ route }) => {
   const navigation = useNavigation();
+  const [activeTab, setActiveTab] = useState("Home");
+
+  useEffect(() => {
+    if (route?.params?.myActiveTab) {
+      setActiveTab(route.params.myActiveTab);
+    }
+  }, [route?.params]);
+
+  console.log("The props value: " + route?.params?.myActiveTab);
+  console.log("The effected value: " + activeTab);
 
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
-        if (activeTab === "Tickets") {
+        if (activeTab === "Ticket") {
           setActiveTab("Home");
           return true;
         }
@@ -34,11 +40,7 @@ const LandingScreen = () => {
 
   return (
     <>
-      {activeTab === "Home" ? (
-        <MyHomeScreen />
-      ) : (
-        <TicketScreen />
-      )}
+      {activeTab === "Home" ? <MyHomeScreen /> : <TicketScreen />}
       <FloatingBottomTab activeTab={activeTab} onTabPress={setActiveTab} />
     </>
   );

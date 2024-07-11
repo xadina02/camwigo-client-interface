@@ -43,73 +43,84 @@ const RegistrationScreen = () => {
       <StatusBar backgroundColor="#070C35" />
       <View style={styles.backgroundDiv}>
         <View style={styles.another}>
-          <TouchableOpacity
-            style={styles.backArrowContainer}
-            onPress={() => navigation.goBack()}
-            accessible={true}
-            accessibilityLabel="Back"
-            accessibilityHint="Navigates to the previous screen"
-          >
-            <Image source={BackArrow} style={styles.backArrow} />
-          </TouchableOpacity>
-          <Text style={styles.header}>Complete Your Reservation</Text>
+          <View style={styles.backArrowParent}>
+            <TouchableOpacity
+              style={styles.backArrowContainer}
+              onPress={() => navigation.goBack()}
+              accessible={true}
+              accessibilityLabel="Back"
+              accessibilityHint="Navigates to the previous screen"
+            >
+              <Image source={BackArrow} style={styles.backArrow} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.heading}>
+            <Text style={styles.header}>Complete Your Registration</Text>
+          </View>
         </View>
       </View>
+
       <View style={styles.container}>
-        <View style={styles.ticketBox}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.topper}>
-              <Image
-                source={require("../assets/CamWiGo_logo.png")} // Replace with your logo
-                style={styles.logo}
-              />
-              <View style={styles.topperText}>
-                <Text style={styles.title}>CamWiGo</Text>
-                <Text style={styles.subHeader}>No stress, travel easy..</Text>
-              </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.topper}>
+            <Image
+              source={require("../assets/CamWiGo_logo.png")} // Replace with your logo
+              style={styles.logo}
+            />
+            <View style={styles.topperText}>
+              <Text style={styles.title}>CamWiGo</Text>
+              <Text style={styles.subHeader}>No stress, travel easy..</Text>
             </View>
-            <Text style={styles.label}>First Name <Text style={styles.star}>*</Text></Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter first name"
-              value={firstName}
-              onChangeText={setFirstName}
-            />
-            <Text style={styles.label}>Last Name <Text style={styles.star}>*</Text></Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter last name"
-              value={lastName}
-              onChangeText={setLastName}
-            />
-            <Text style={styles.label}>National Identification Number <Text style={styles.star}>*</Text></Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter NIN (as it is on your national identity card)"
-              value={nin}
-              onChangeText={setNin}
-            />
-            <Text style={styles.label}>Phone Number <Text style={styles.star}>*</Text></Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter tel"
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-            />
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter email address"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-            />
-            <TouchableOpacity style={styles.button} onPress={handleContinue}>
-              <Text style={styles.buttonText}>Continue ➔</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
+          </View>
+          <Text style={styles.label}>
+            First Name <Text style={styles.star}>*</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter first name"
+            value={firstName}
+            onChangeText={setFirstName}
+          />
+          <Text style={styles.label}>
+            Last Name <Text style={styles.star}>*</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter last name"
+            value={lastName}
+            onChangeText={setLastName}
+          />
+          <Text style={styles.label}>
+            National Identification Number <Text style={styles.star}>*</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter NIN (as it is on your national identity card)"
+            value={nin}
+            onChangeText={setNin}
+          />
+          <Text style={styles.label}>
+            Phone Number <Text style={styles.star}>*</Text>
+          </Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter tel"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+            keyboardType="phone-pad"
+          />
+          <Text style={styles.label}>Email</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter email address"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+          <TouchableOpacity style={styles.button} onPress={handleContinue}>
+            <Text style={styles.buttonText}>Continue ➔</Text>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
 
       <CustomModal
@@ -127,54 +138,67 @@ const RegistrationScreen = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#D9DBE7",
+    backgroundColor: "#070c35",
   },
   backgroundDiv: {
-    height: "17%",
+    height: "12%",
+    // backgroundColor: "#f5f5f5",
+    //height: "17%",
   },
   another: {
     height: "95%",
-    backgroundColor: "#070C35",
+    //backgroundColor: "#070C35",
+    //  backgroundColor: "red",
+
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     padding: 15,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    //justifyContent:"center"
   },
+  backArrowParent: {
+    // backgroundColor: 'green',
+  },  
   backArrowContainer: {
-    position: "absolute",
-    left: 15,
-    top: "29%",
-    transform: [{ translateY: -12 }],
-    zIndex: 1, // Ensure it's on top
+    // position: "absolute",
+    left: 8,
+    //top: "29%",
+    // transform: [{ translateY: -12 }],
+    // zIndex: 1, // Ensure it's on top
   },
   backArrow: {
     width: 30,
     height: 30,
     tintColor: "#CDD2F8",
   },
+  heading: {
+    marginLeft: "10%",
+  },
   header: {
-    textAlign: "center",
     color: "#CDD2F8",
     fontSize: 25,
     fontWeight: "900",
+    // marginLeft: '-4%',
   },
   container: {
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    height: "93%",
-    marginTop: -(2.1 * StatusBar.currentHeight),
-    justifyContent: "space-between",
-  },
-  ticketBox: {
-    padding: 20,
-    backgroundColor: "#ffffff",
-    height: "99%",
-    borderRadius: 20,
+    paddingVertical: 25,
+    height: "90%",
+    position: "relative",
+    // marginTop: -(0.77 * StatusBar.currentHeight),
+    backgroundColor: "#f5f5f5",
+    //backgroundColor: "red",
+
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   topper: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: '10%',
-    marginBottom: '7%',
+    // marginTop: '3%',
+    marginBottom: '5%',
   },
   topperText: {
     marginLeft: '5%',

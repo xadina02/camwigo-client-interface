@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
     alignSelf: "center",
     marginBottom: 20,

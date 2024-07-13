@@ -140,7 +140,7 @@ const ReservationScreen = ({ route }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() =>
-            navigation.navigate("PaymentScreen", {
+            navigation.navigate("RegistrationScreen", {
               journey: journey,
             })
           }

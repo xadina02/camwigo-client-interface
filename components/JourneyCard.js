@@ -11,9 +11,9 @@ const JourneyCard = ({ journey }) => {
       <View style={styles.headerRow}>
         <View style={styles.vehicleInfo}>
           <Image source={BusIcon} style={styles.vehicleIcon} />
-          <Text style={styles.vehicleName}>{journey.route}</Text>
+          <Text style={styles.vehicleName}>{journey.vehicle.name}</Text>
         </View>
-        <Text style={styles.type}>{journey.type.toUpperCase()}</Text>
+        <Text style={styles.type}>{journey.vehicle.vehicle_category.name.en.toUpperCase()}</Text>
       </View>
 
       <JourneyFleetDetails journey={journey} seating={true} status={false} none={false}/>

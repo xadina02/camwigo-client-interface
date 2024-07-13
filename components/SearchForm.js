@@ -12,6 +12,10 @@ import {
   Alert,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import useGetOrigins from "../utils/useGetOrigin";
+import useGetDestinations from "../utils/useGetDestination";
+import useGetSchedules from "../utils/useGetSchedule";
+import useGetDates from "../utils/useGetDate";
 import { useNavigation } from "@react-navigation/native";
 import OriginIcon from "../assets/direct-down.png";
 import DestinationIcon from "../assets/location.png";
@@ -21,16 +25,20 @@ import dummyData from "../dummy/tripDefinition";
 
 const SearchForm = ({ onSearch }) => {
   const navigation = useNavigation();
+  const appToken = "sekurity$227";
 
-  // State management
-  const [origins, setOrigins] = useState(dummyData.origins);
+  const { origins } = useGetOrigins(appToken);
   const [destinations, setDestinations] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [dates, setDates] = useState([]);
+  const [time, setTime] = useState("");
 
   const [selectedOrigin, setSelectedOrigin] = useState("");
+  const [selectedOriginId, setSelectedOriginId] = useState(0);
   const [selectedDestination, setSelectedDestination] = useState("");
+  const [selectedDestinationId, setSelectedDestinationId] = useState(0);
   const [selectedSchedule, setSelectedSchedule] = useState("");
+  const [selectedScheduleId, setSelectedScheduleId] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
 
   const [loading, setLoading] = useState(false);
@@ -40,13 +48,24 @@ const SearchForm = ({ onSearch }) => {
 
   const [openDatePicker, setOpenDatePicker] = useState(false);
 
-  useEffect(() => {
-    setFilteredData(origins);
-  }, []);
+  // Fetch destinations whenever selectedOriginId changes
+  const { destinations: fetchedDestinations } = useGetDestinations(
+    selectedOriginId,
+    appToken
+  );
+  const { schedules: fetchedSchedules } = useGetSchedules(
+    selectedDestinationId,
+    appToken
+  );
+  const { dates: fetchedDates } = useGetDates(selectedScheduleId, appToken);
 
   useEffect(() => {
-    if (selectedOrigin) {
-      setDestinations(dummyData.destinations[selectedOrigin] || []);
+    setFilteredData(origins);
+  }, [origins]);
+
+  useEffect(() => {
+    if (selectedOriginId) {
+      setDestinations(fetchedDestinations);
     } else {
       setDestinations([]);
     }
@@ -55,35 +74,51 @@ const SearchForm = ({ onSearch }) => {
     setSelectedDate(null);
     setSchedules([]);
     setDates([]);
-  }, [selectedOrigin]);
+  }, [selectedOriginId, fetchedDestinations]);
 
   useEffect(() => {
-    if (selectedDestination) {
-      setSchedules(dummyData.schedules[selectedDestination] || []);
+    if (selectedDestinationId) {
+      setSchedules(fetchedSchedules);
     } else {
       setSchedules([]);
     }
     setSelectedSchedule("");
     setSelectedDate(null);
     setDates([]);
-  }, [selectedDestination]);
+  }, [selectedDestinationId, fetchedSchedules]);
 
   useEffect(() => {
-    if (selectedSchedule) {
-      setDates(dummyData.dates[selectedSchedule] || []);
+    if (selectedScheduleId) {
+      setDates(fetchedDates);
     } else {
       setDates([]);
     }
     setSelectedDate(null);
-  }, [selectedSchedule]);
+  }, [selectedScheduleId, fetchedDates]);
 
   const handleSearch = () => {
-    onSearch({
-      origin: selectedOrigin,
-      destination: selectedDestination,
-      schedule: selectedSchedule,
-      date: selectedDate,
-    });
+    if (selectedDate) {
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+      // Format the selectedDate to 'Tue, Jul 16 2024'
+      const options = {
+        weekday: "short",
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      };
+      const formattedDisplayDate = new Intl.DateTimeFormat(
+        "en-US",
+        options
+      ).format(selectedDate);
+      onSearch({
+        origin: selectedOrigin,
+        destination: selectedDestination,
+        time: time,
+        date: formattedDisplayDate,
+        route_schedule: selectedScheduleId,
+        journey_date: formattedDate,
+      });
+    }
   };
 
   const openModal = (type) => {
@@ -100,11 +135,15 @@ const SearchForm = ({ onSearch }) => {
 
   const handleItemPress = (item) => {
     if (modalType === "origin") {
-      setSelectedOrigin(item.value);
+      setSelectedOrigin(item.origin.en);
+      setSelectedOriginId(item.id);
     } else if (modalType === "destination") {
-      setSelectedDestination(item.value);
+      setSelectedDestination(item.destination.en);
+      setSelectedDestinationId(item.id);
     } else if (modalType === "schedule") {
-      setSelectedSchedule(item.value);
+      setSelectedSchedule(item.label.en + " - " + item.departure_time);
+      setTime(item.departure_time);
+      setSelectedScheduleId(item.id);
     }
     setModalVisible(false);
   };
@@ -119,7 +158,12 @@ const SearchForm = ({ onSearch }) => {
       style={styles.modalItem}
       onPress={() => handleItemPress(item)}
     >
-      <Text style={styles.modalItemText}>{item.label}</Text>
+      <Text style={styles.modalItemText}>
+        {modalType === "origin" && item.origin.en}
+        {modalType === "destination" && item.destination.en}
+        {modalType === "schedule" &&
+          item.label.en + " - " + item.departure_time}
+      </Text>
     </TouchableOpacity>
   );
 
@@ -151,7 +195,7 @@ const SearchForm = ({ onSearch }) => {
           <FlatList
             data={filteredData}
             renderItem={renderModalItem}
-            keyExtractor={(item) => item.value}
+            keyExtractor={(item) => item.id}
             style={styles.modalList}
           />
         </View>
@@ -160,12 +204,21 @@ const SearchForm = ({ onSearch }) => {
   );
 
   // Calculate minimum and maximum date
-  const minDate = dates.length ? new Date(Math.min(...dates)) : new Date();
-  const maxDate = dates.length ? new Date(Math.max(...dates)) : new Date();
+  const journeyDates = dates.map((date) => new Date(date.journey_date));
+
+  // Calculate minimum and maximum date
+  const minDate = journeyDates.length
+    ? new Date(Math.min(...journeyDates))
+    : new Date();
+  const maxDate = journeyDates.length
+    ? new Date(Math.max(...journeyDates))
+    : new Date();
 
   // Function to check if a date is enabled (selectable)
   const isDateEnabled = (date) => {
-    return dates.some((availableDate) => availableDate.getTime() === date.getTime());
+    return journeyDates.some(
+      (availableDate) => availableDate.getTime() === date.getTime()
+    );
   };
 
   return (
@@ -202,7 +255,11 @@ const SearchForm = ({ onSearch }) => {
         >
           <Image source={ScheduleIcon} style={styles.elementIcon} />
           <Text style={styles.elementLabel}>
-            {selectedSchedule ? selectedSchedule : "Pick Schedule"}
+            {selectedSchedule
+              ? selectedSchedule.length > 14
+                ? `${selectedSchedule.substring(0, 14)}...`
+                : selectedSchedule
+              : "Pick Schedule"}
           </Text>
         </TouchableOpacity>
 
@@ -230,19 +287,7 @@ const SearchForm = ({ onSearch }) => {
         />
       )}
 
-      <TouchableOpacity
-        onPress={
-          selectedDate &&
-          (() =>
-            navigation.navigate("ListScreen", {
-              origin: selectedOrigin,
-              destination: selectedDestination,
-              date: selectedDate ? selectedDate.toDateString() : "",
-              time: selectedSchedule,
-            }))
-        }
-        style={styles.button}
-      >
+      <TouchableOpacity onPress={handleSearch} style={styles.button}>
         <Text style={styles.buttonText}>Search</Text>
       </TouchableOpacity>
 

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
+import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
 import Delimiter from "../assets/delimiterForm.png";
 
@@ -16,15 +17,26 @@ const PaymentMethodCard = ({
   paymentMethodName,
   isSelected,
   onCardSelect,
+  data,
 }) => {
   const navigation = useNavigation();
 
   const [accountNumber, setAccountNumber] = useState("");
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(data.fare);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handlePay = () => {
     console.log("Account Number:", accountNumber);
     console.log("Amount to Pay:", amount);
+  };
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    navigation.navigate("LandingScreen", { myActiveTab: "Ticket" });
   };
 
   return (
@@ -62,17 +74,27 @@ const PaymentMethodCard = ({
               onChangeText={setAmount}
               placeholder="Enter amount"
               keyboardType="numeric"
+              editable={false}
+              selectTextOnFocus={false}
             />
             <TouchableOpacity
               style={styles.payButton}
-              // onPress={openModal}
-              onPress={() => navigation.navigate("RegistrationScreen")}
+              onPress={openModal}
+              // onPress={() => navigation.navigate("RegistrationScreen")}
             >
               <Text style={styles.payButtonText}>Pay</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
       )}
+
+      <CustomModal
+        visible={modalVisible}
+        onClose={closeModal}
+        icon={require("../assets/success-tick.png")}
+        headerText="Success"
+        bodyText="Your payment was successfully received."
+      />
     </View>
   );
 };

@@ -10,13 +10,12 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../assets/arrow-circle-left.png";
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({route}) => {
   const navigation = useNavigation();
-  const [modalVisible, setModalVisible] = useState(false);
+  const { journey } = route.params;
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -24,18 +23,11 @@ const RegistrationScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-    navigation.navigate("LandingScreen", { myActiveTab: "Ticket" });
-  };
-
   const handleContinue = () => {
     // Perform form validation and submission logic here
-    openModal();
+    navigation.navigate("PaymentScreen", {
+      journey: journey,
+    })
   };
 
   return (
@@ -122,15 +114,6 @@ const RegistrationScreen = () => {
           </TouchableOpacity>
         </ScrollView>
       </View>
-
-      <CustomModal
-        visible={modalVisible}
-        onClose={closeModal}
-        // onClose={() => navigation.navigate("RegistrationScreen")}
-        icon={require("../assets/success-tick.png")}
-        headerText="Success"
-        bodyText="Your payment was successfully received."
-      />
     </SafeAreaView>
   );
 };

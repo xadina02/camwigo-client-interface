@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
 import PaymentMethodCard from "../components/PaymentMethodCard";
 import BackArrow from "../assets/arrow-circle-left.png";
@@ -68,12 +67,14 @@ const PaymentScreen = ({ route }) => {
             paymentMethodName="MTN Mobile Money"
             isSelected={selectedCard === "MTN Mobile Money"}
             onCardSelect={() => handleCardSelect("MTN Mobile Money")}
+            data={journey}
           />
           <PaymentMethodCard
             imageSource={OrangeLogo}
             paymentMethodName="Orange Money"
             isSelected={selectedCard === "Orange Money"}
             onCardSelect={() => handleCardSelect("Orange Money")}
+            data={journey}
           />
 
           <PaymentMethodCard
@@ -81,18 +82,10 @@ const PaymentScreen = ({ route }) => {
             paymentMethodName="Visa Card Pay"
             isSelected={selectedCard === "Visa Card Pay"}
             onCardSelect={() => handleCardSelect("Visa Card Pay")}
+            data={journey}
           />
         </ScrollView>
       </View>
-
-      <CustomModal
-        visible={modalVisible}
-        onClose={closeModal}
-        // onClose={() => navigation.navigate("RegistrationScreen")}
-        icon={require("../assets/success-tick.png")}
-        headerText="Success"
-        bodyText="Your payment was successfully received."
-      />
     </SafeAreaView>
   );
 };
@@ -144,8 +137,6 @@ const styles = StyleSheet.create({
     position: "relative",
     // marginTop: -(0.77 * StatusBar.currentHeight),
     backgroundColor: "#fff",
-    //backgroundColor: "red",
-
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

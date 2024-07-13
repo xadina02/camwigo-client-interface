@@ -8,12 +8,30 @@ import ClockIcon from "../assets/clock.png";
 // const BusIcon = require('../assets/bus.svg');
 
 const JourneyFleetDetails = ({ journey, seating, status, none }) => {
+  const dateObj = new Date(journey.journey_date);
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(dateObj);
+
+  const formatTime = (time) => {
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = hour % 12 || 12;
+    return `${formattedHour}:${minutes} ${ampm}`;
+  };
+
+  const formattedTime = formatTime(journey.route_schedule.departure_time);
+
   return (
     <>
       <View style={status ? styles.infoRowTicket : styles.infoRow}>
         <View style={styles.locationBox1}>
           <Text style={styles.locationLabel}>Origin</Text>
-          <Text style={styles.location}>{journey.origin}</Text>
+          <Text style={styles.location}>{journey.route_schedule.route_destination.route.origin.en}</Text>
         </View>
         <View style={styles.indicatorBox}>
           <Image source={Line} style={styles.line} />
@@ -23,7 +41,7 @@ const JourneyFleetDetails = ({ journey, seating, status, none }) => {
         </View>
         <View style={styles.locationBox2}>
           <Text style={styles.locationLabel}>Destination</Text>
-          <Text style={styles.location}>{journey.destination}</Text>
+          <Text style={styles.location}>{journey.route_schedule.route_destination.destination.en}</Text>
         </View>
       </View>
       <View style={status ? styles.detailsRowTicket : styles.detailsRow}>
@@ -31,8 +49,8 @@ const JourneyFleetDetails = ({ journey, seating, status, none }) => {
           <View style={styles.detailWrapper1}>
             <Image source={ClockIcon} style={styles.timeIcon}></Image>
             <View>
-              <Text style={styles.time}>{journey.time}</Text>
-              <Text style={styles.date}>{journey.date}</Text>
+              <Text style={styles.time}>{formattedTime}</Text>
+              <Text style={styles.date}>{formattedDate}</Text>
             </View>
           </View>
         </View>
@@ -44,9 +62,9 @@ const JourneyFleetDetails = ({ journey, seating, status, none }) => {
                   <Text style={styles.detailLabel1}>Available Seats</Text>
                   <Text style={styles.seats}>
                     <Text style={styles.availableSeats}>
-                      {journey.availableSeats} /
+                      {journey.available_seats} /
                     </Text>{" "}
-                    {journey.totalSeats}
+                    {journey.vehicle.vehicle_category.size}
                   </Text>
                 </View>
               </View>
@@ -76,7 +94,7 @@ const JourneyFleetDetails = ({ journey, seating, status, none }) => {
                 <Image source={CoinIcon} style={styles.fareIcon}></Image>
                 <Text style={styles.detailLabel2}>Fleet Fare</Text>
               </View>
-              <Text style={styles.fare}>{journey.fare}</Text>
+              <Text style={styles.fare}>{journey.route_schedule.route_destination.price}</Text>
             </View>
           </View>
         </View>

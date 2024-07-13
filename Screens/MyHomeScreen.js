@@ -13,18 +13,16 @@ import JourneyCard from "../components/JourneyCard";
 import Logo from "../assets/CamWiGo_logo.png";
 import ProfileIcon from "../assets/default_profile.png";
 import dummyJourneys from "../dummy/journeys";
-// import axios from 'axios'
+import { useNavigation } from '@react-navigation/native'
 
 const MyHomeScreen = () => {
+  const navigation = useNavigation();
   const [journeys, setJourneys] = useState([]);
-  //   const [activeTab, setActiveTab] = useState("Home");
 
   const handleSearch = async (searchParams) => {
-    // Replace with your actual search endpoint
-    const response = await axios.get("https://api.example.com/search", {
-      params: searchParams,
+    navigation.navigate("ListScreen", {
+      searchParams,
     });
-    setJourneys(response.data);
   };
 
   return (
@@ -56,9 +54,9 @@ const MyHomeScreen = () => {
             style={styles.scrollView}
             showsVerticalScrollIndicator={false}
           >
-            {dummyJourneys.map((journey) => (
+            {/* {dummyJourneys.map((journey) => (
               <JourneyCard key={journey.id} journey={journey} />
-            ))}
+            ))} */}
           </ScrollView>
         </View>
       </SafeAreaView>

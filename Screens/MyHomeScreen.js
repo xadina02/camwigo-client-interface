@@ -18,19 +18,16 @@ import useGetTopTravelJourneys from "../utils/useGetTopTravelJourney";
 
 const MyHomeScreen = () => {
   const navigation = useNavigation();
-  const [loading, setLoading] = useState(true);
   const [journeys, setJourneys] = useState([]);
   const appToken = "sekurity$227";
-  const { allTopTravelJourneys: topTravelJourneys } =
+  const { allTopTravelJourneys: topTravelJourneys, loading: loading } =
     useGetTopTravelJourneys(appToken);
 
   useEffect(() => {
-    setLoading(true);
     try {
       setJourneys(topTravelJourneys);
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
+      // Do something
     }
   }, [topTravelJourneys]);
 

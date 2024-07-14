@@ -4,9 +4,11 @@ import { API } from "./fetcher";
 
 const useGetTopTravelJourneys = (security) => {
   const [allTopTravelJourneys, setTopTravelJourneys] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchTopTravelJourneys = async () => {
+      setLoading(true);
       try {
         const response = await API.getTopTravelJourneys(security);
         const statusCode = response[0];
@@ -25,13 +27,15 @@ const useGetTopTravelJourneys = (security) => {
       } catch (error) {
         // toast.error(error.message);
         // console.error('Fetch travelJourneys error: ', error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTopTravelJourneys();
   }, [security]);
 
-  return { allTopTravelJourneys };
+  return { allTopTravelJourneys, loading };
 };
 
 export default useGetTopTravelJourneys;

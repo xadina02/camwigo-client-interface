@@ -3,19 +3,19 @@ import { toast } from "react-toastify";
 import { API } from "./fetcher";
 
 const useGetTravelJourneys = (routeScheduleId, journeyDate, security) => {
-  const [travelJourneys, setTravelJourneys] = useState([]);
+  const [allTravelJourneys, setTravelJourneys] = useState([]);
 
   useEffect(() => {
-    // console.log("useGetTravelJourneys hook called");
     const fetchTravelJourneys = async () => {
       try {
         const response = await API.getSearchedJourneys(routeScheduleId, journeyDate, security);
         const statusCode = response[0];
         const res = response[1];
-        // console.log('API response: ', res);
         const status = response[2];
 
         if (status) {
+          // console.log("useGetTravelJourneys hook called");
+
           setTravelJourneys(res.data);
           // console.log('Fetched travelJourneys: ', res.data);
         } else if (statusCode === 404) {
@@ -23,7 +23,7 @@ const useGetTravelJourneys = (routeScheduleId, journeyDate, security) => {
           // console.log('TravelJourneys Empty: ', res.message);
         }
       } catch (error) {
-        toast.error(error.message);
+        // toast.error(error.message);
         // console.error('Fetch travelJourneys error: ', error);
       }
     };
@@ -31,7 +31,7 @@ const useGetTravelJourneys = (routeScheduleId, journeyDate, security) => {
     fetchTravelJourneys();
   }, [routeScheduleId, journeyDate, security]);
 
-  return { travelJourneys };
+  return { allTravelJourneys };
 };
 
 export default useGetTravelJourneys;

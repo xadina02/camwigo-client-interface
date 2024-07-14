@@ -1,29 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; // Import icons if using expo
 
-const DateFilterCard = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+const DateFilterCard = ({ dates, chosenDate, onDateChange }) => {
+  const [selectedDate, setSelectedDate] = useState(new Date(chosenDate));
 
-  // Generate an array of dates for the date picker
+  useEffect(() => {
+    setSelectedDate(new Date(chosenDate));
+  }, [chosenDate]);
+
+  // Extract and sort the dates from the journey_date keys
   const getDateArray = () => {
-    let dateArray = [];
-    const today = new Date();
-    for (let i = 0; i < 30; i++) {
-      let date = new Date(today);
-      date.setDate(today.getDate() + i);
-      dateArray.push(date);
-    }
+    let dateArray = dates.map(date => new Date(date.journey_date));
+    dateArray.sort((a, b) => a - b);
     return dateArray;
   };
 
   const dateArray = getDateArray();
+
+  // Find the index of the chosen date
+  const chosenDateIndex = dateArray.findIndex(date => date.toDateString() === new Date(chosenDate).toDateString());
 
   // Format date to display
   const formatDate = (date) => {
     const day = date.getDate();
     const dayName = date.toLocaleDateString('en-US', { weekday: 'short' });
     return { day, dayName };
+  };
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    onDateChange(date.toISOString());
   };
 
   const renderDate = ({ item }) => {
@@ -33,7 +40,7 @@ const DateFilterCard = () => {
     return (
       <TouchableOpacity
         style={[styles.dateButton, isSelected && styles.selectedDateButton]}
-        onPress={() => setSelectedDate(item)}
+        onPress={() => handleDateSelect(item)}
       >
         <Text style={[styles.dateText, isSelected && styles.selectedDateText]}>{day}</Text>
         <Text style={[styles.dayText, isSelected && styles.selectedDayText]}>{dayName}</Text>
@@ -57,6 +64,10 @@ const DateFilterCard = () => {
         keyExtractor={(item) => item.toString()}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.dateList}
+        initialScrollIndex={chosenDateIndex} // Set initial scroll position
+        getItemLayout={(data, index) => (
+          { length: 61, offset: 61 * index, index }
+        )} // Ensure smooth scrolling
       />
     </View>
   );

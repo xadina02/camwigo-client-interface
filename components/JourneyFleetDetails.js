@@ -11,7 +11,6 @@ const JourneyFleetDetails = ({ journey, seating, status, none }) => {
   const dateObj = new Date(journey.journey_date);
   const formattedDate = new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
-    year: 'numeric',
     month: 'short',
     day: 'numeric'
   }).format(dateObj);

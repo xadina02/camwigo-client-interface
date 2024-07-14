@@ -98,8 +98,9 @@ const SearchForm = ({ onSearch }) => {
 
   const handleSearch = () => {
     if (selectedDate) {
-      const formattedDate = selectedDate.toISOString().split("T")[0];
-      // Format the selectedDate to 'Tue, Jul 16 2024'
+      const adjustedDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000);
+      const formattedDate = adjustedDate.toISOString().split("T")[0];
+
       const options = {
         weekday: "short",
         year: "numeric",
@@ -110,11 +111,13 @@ const SearchForm = ({ onSearch }) => {
         "en-US",
         options
       ).format(selectedDate);
+
       onSearch({
         origin: selectedOrigin,
         destination: selectedDestination,
         time: time,
         date: formattedDisplayDate,
+        dates: dates,
         route_schedule: selectedScheduleId,
         journey_date: formattedDate,
       });

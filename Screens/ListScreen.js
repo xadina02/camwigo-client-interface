@@ -19,21 +19,27 @@ import { useNavigation } from '@react-navigation/native'
 const ListScreen = ({ route }) => {
   const navigation = useNavigation();
   const { searchParams } = route.params;
-  const { origin, destination, journey_date, date, route_schedule, time } = searchParams;
+  const { origin, destination, journey_date, date, dates, route_schedule, time } = searchParams;
   const [loading, setLoading] = useState(true);
   const [journeys, setJourneys] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(journey_date);
   const appToken = "sekurity$227";
-  const { travelJourneys } = useGetTravelJourneys(route_schedule, journey_date, appToken);
+  const { allTravelJourneys: travelJourneys } = useGetTravelJourneys(route_schedule, selectedDate, appToken);
+
+  const handleDateChange = (newDate) => {
+    const formattedDate = newDate.split('T')[0];
+  setSelectedDate(formattedDate);
+  };
 
   useEffect(() => {
-    const fetchJourneys = async () => {
       setLoading(true);
-      setJourneys(travelJourneys);
-      setLoading(false);
-    };
-
-    fetchJourneys();
-  }, [searchParams]);
+      try {
+        setJourneys(travelJourneys);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+      }
+  }, [selectedDate, travelJourneys]);
 
   const formatTime = (time) => {
     const [hours, minutes] = time.split(':');
@@ -62,18 +68,18 @@ const ListScreen = ({ route }) => {
           {date} | {formattedTime}
         </Text>
       </View>
-      <DateFilterCard />
+      <DateFilterCard dates={dates} chosenDate={journey_date} onDateChange={handleDateChange} />
       <View style={styles.container}>
         {loading ? (
             <View style={styles.loaderContainer}>
-              <ActivityIndicator size="large" color="#070C35" />
+              <ActivityIndicator size="large" color="#070C35" style={styles.loader} />
             </View>
         ) : (
           <ScrollView
             style={styles.scrollView}
             showsVerticalScrollIndicator={false}
           >
-            {travelJourneys.map((journey) => (
+            {journeys.map((journey) => (
               <View style={styles.separator} key={journey.id}>
                 <JourneyCard key={journey.id} journey={journey} />
               </View>
@@ -106,7 +112,7 @@ const styles = StyleSheet.create({
   backArrow: {
     width: 30,
     height: 30,
-    tintColor: "#CDD2F8", // Apply tint color if the arrow image is monochrome
+    tintColor: "#CDD2F8",
   },
   header: {
     textAlign: "center",
@@ -137,6 +143,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 200,
   },
+  loader: {
+    marginTop: '40%'
+  }
 });
 
 export default ListScreen;

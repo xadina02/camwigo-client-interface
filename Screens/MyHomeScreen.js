@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -7,17 +7,32 @@ import {
   View,
   StyleSheet,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
 import SearchForm from "../components/SearchForm";
 import JourneyCard from "../components/JourneyCard";
 import Logo from "../assets/CamWiGo_logo.png";
 import ProfileIcon from "../assets/default_profile.png";
-import dummyJourneys from "../dummy/journeys";
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from "@react-navigation/native";
+import useGetTopTravelJourneys from "../utils/useGetTopTravelJourney";
 
 const MyHomeScreen = () => {
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(true);
   const [journeys, setJourneys] = useState([]);
+  const appToken = "sekurity$227";
+  const { allTopTravelJourneys: topTravelJourneys } =
+    useGetTopTravelJourneys(appToken);
+
+  useEffect(() => {
+    setLoading(true);
+    try {
+      setJourneys(topTravelJourneys);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }, [topTravelJourneys]);
 
   const handleSearch = async (searchParams) => {
     navigation.navigate("ListScreen", {
@@ -49,15 +64,25 @@ const MyHomeScreen = () => {
           </View>
         </View>
         <View style={styles.container}>
-          <Text style={styles.topic}>Recent popular journeys</Text>
-          <ScrollView
-            style={styles.scrollView}
-            showsVerticalScrollIndicator={false}
-          >
-            {/* {dummyJourneys.map((journey) => (
+          <Text style={styles.topic}>Today's Top Travel Journeys</Text>
+          {loading ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator
+                size="large"
+                color="#070C35"
+                style={styles.loader}
+              />
+            </View>
+          ) : (
+            <ScrollView
+              style={styles.scrollView}
+              showsVerticalScrollIndicator={false}
+            >
+              {journeys.map((journey) => (
               <JourneyCard key={journey.id} journey={journey} />
-            ))} */}
-          </ScrollView>
+            ))}
+            </ScrollView>
+          )}
         </View>
       </SafeAreaView>
     </>
@@ -128,6 +153,9 @@ const styles = StyleSheet.create({
   scrollView: {
     marginTop: 3,
     height: "53.8%",
+  },
+  loader: {
+    marginTop: "40%",
   },
 });
 

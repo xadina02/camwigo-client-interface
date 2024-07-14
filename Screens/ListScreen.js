@@ -14,37 +14,63 @@ import useGetTravelJourneys from "../utils/useGetTravelJourney";
 import DateFilterCard from "../components/DateFilterCard";
 import JourneyCard from "../components/JourneyCard";
 import BackArrow from "../assets/arrow-circle-left.png";
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from "@react-navigation/native";
 
 const ListScreen = ({ route }) => {
   const navigation = useNavigation();
   const { searchParams } = route.params;
-  const { origin, destination, journey_date, date, dates, route_schedule, time } = searchParams;
+  const {
+    origin,
+    destination,
+    journey_date,
+    date,
+    dates,
+    route_schedule,
+    time,
+  } = searchParams;
   const [loading, setLoading] = useState(true);
   const [journeys, setJourneys] = useState([]);
   const [selectedDate, setSelectedDate] = useState(journey_date);
+  const [labelDate, setLabelDate] = useState(date);
   const appToken = "sekurity$227";
-  const { allTravelJourneys: travelJourneys } = useGetTravelJourneys(route_schedule, selectedDate, appToken);
+  const { allTravelJourneys: travelJourneys } = useGetTravelJourneys(
+    route_schedule,
+    selectedDate,
+    appToken
+  );
 
   const handleDateChange = (newDate) => {
-    const formattedDate = newDate.split('T')[0];
-  setSelectedDate(formattedDate);
+    const formattedDate = newDate.split("T")[0];
+    setSelectedDate(formattedDate);
+
+    const options = {
+      weekday: "short",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    const dateObject = new Date(newDate);
+    const formattedDisplayDate = new Intl.DateTimeFormat(
+      "en-US",
+      options
+    ).format(dateObject);
+    setLabelDate(formattedDisplayDate);
   };
 
   useEffect(() => {
-      setLoading(true);
-      try {
-        setJourneys(travelJourneys);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
+    setLoading(true);
+    try {
+      setJourneys(travelJourneys);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   }, [selectedDate, travelJourneys]);
 
   const formatTime = (time) => {
-    const [hours, minutes] = time.split(':');
+    const [hours, minutes] = time.split(":");
     const hour = parseInt(hours, 10);
-    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const ampm = hour >= 12 ? "PM" : "AM";
     const formattedHour = hour % 12 || 12;
     return `${formattedHour}:${minutes} ${ampm}`;
   };
@@ -65,15 +91,23 @@ const ListScreen = ({ route }) => {
           {origin} - {destination}
         </Text>
         <Text style={styles.headerSubText}>
-          {date} | {formattedTime}
+          {labelDate} | {formattedTime}
         </Text>
       </View>
-      <DateFilterCard dates={dates} chosenDate={journey_date} onDateChange={handleDateChange} />
+      <DateFilterCard
+        dates={dates}
+        chosenDate={journey_date}
+        onDateChange={handleDateChange}
+      />
       <View style={styles.container}>
         {loading ? (
-            <View style={styles.loaderContainer}>
-              <ActivityIndicator size="large" color="#070C35" style={styles.loader} />
-            </View>
+          <View style={styles.loaderContainer}>
+            <ActivityIndicator
+              size="large"
+              color="#070C35"
+              style={styles.loader}
+            />
+          </View>
         ) : (
           <ScrollView
             style={styles.scrollView}
@@ -144,8 +178,8 @@ const styles = StyleSheet.create({
     marginTop: 200,
   },
   loader: {
-    marginTop: '40%'
-  }
+    marginTop: "40%",
+  },
 });
 
 export default ListScreen;

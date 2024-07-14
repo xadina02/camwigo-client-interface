@@ -1,16 +1,19 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import BusIcon from "../assets/bus.png";
+// import BusIcon from "../assets/bus.png";
 import JourneyFleetDetails from './JourneyFleetDetails'
 import { useNavigation } from '@react-navigation/native'
 
 const JourneyCard = ({ journey }) => {
   const navigation = useNavigation();
+  const baseUrl = "http://192.168.154.124:8000"
+  const imageBaseUrl = `${baseUrl}/storage`
+  const imageIconLink = `${imageBaseUrl}${journey.vehicle.vehicle_category.icon_link}`
   return (
     <View style={styles.card}>
       <View style={styles.headerRow}>
         <View style={styles.vehicleInfo}>
-          <Image source={BusIcon} style={styles.vehicleIcon} />
+          <Image source={{uri: imageIconLink}} style={styles.vehicleIcon} />
           <Text style={styles.vehicleName}>{journey.vehicle.name}</Text>
         </View>
         <Text style={styles.type}>{journey.vehicle.vehicle_category.name.en.toUpperCase()}</Text>

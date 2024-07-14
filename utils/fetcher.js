@@ -130,13 +130,28 @@ export const API = {
 
   /**
    * API request to get travel journeys from search
-   * @param data
    * @param security
    * @returns
    */
   getSearchedJourneys: async (routeScheduleId, journeyDate, security) => {
     const res = await API.execute(
       `vehicle-journey/${routeScheduleId}/${journeyDate}`,
+      "GET",
+      null,
+      null,
+      security
+    );
+    return res;
+  },
+
+  /**
+   * API request to get top travel journeys for today
+   * @param security
+   * @returns
+   */
+  getTopTravelJourneys: async (security) => {
+    const res = await API.execute(
+      "top-travels",
       "GET",
       null,
       null,

@@ -28,12 +28,12 @@ const ListScreen = ({ route }) => {
     route_schedule,
     time,
   } = searchParams;
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [journeys, setJourneys] = useState([]);
   const [selectedDate, setSelectedDate] = useState(journey_date);
   const [labelDate, setLabelDate] = useState(date);
   const appToken = "sekurity$227";
-  const { allTravelJourneys: travelJourneys } = useGetTravelJourneys(
+  const { allTravelJourneys: travelJourneys, loading: loading } = useGetTravelJourneys(
     route_schedule,
     selectedDate,
     appToken
@@ -58,12 +58,10 @@ const ListScreen = ({ route }) => {
   };
 
   useEffect(() => {
-    setLoading(true);
     try {
       setJourneys(travelJourneys);
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
+      // Do something
     }
   }, [selectedDate, travelJourneys]);
 

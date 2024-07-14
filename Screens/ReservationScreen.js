@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import dummySeats from "../dummy/seats";
 import BackArrow from "../assets/arrow-circle-left.png";
 import ReservedIcon from "../assets/bus_seat_reserved.png";
 import SelectedIcon from "../assets/bus_seat_selected.png";
@@ -24,6 +23,27 @@ const ReservationScreen = ({ route }) => {
   const navigation = useNavigation();
   const { journey } = route.params;
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [seats, setSeats] = useState([]);
+
+  useEffect(() => {
+    // Initialize seats based on vehicle category size and reservations
+    const initializeSeats = () => {
+      const vehicleSize = journey.vehicle.vehicle_category.size;
+      const reservedSeats = journey.reservations.map(res => res.position);
+      const seatArray = [];
+
+      for (let i = 1; i <= vehicleSize; i++) {
+        seatArray.push({
+          seatNumber: i.toString(),
+          isReserved: reservedSeats.includes(i),
+        });
+      }
+
+      setSeats(seatArray);
+    };
+
+    initializeSeats();
+  }, [journey]);
 
   // Function to split seats into two columns layout
   const getSeatRows = (seats) => {
@@ -34,7 +54,7 @@ const ReservationScreen = ({ route }) => {
     return seatRows;
   };
 
-  const seatRows = getSeatRows(dummySeats);
+  const seatRows = getSeatRows(seats);
 
   // Handle seat selection
   const handleSeatSelect = (seatNumber) => {

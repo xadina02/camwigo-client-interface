@@ -156,6 +156,14 @@ const SearchForm = ({ onSearch }) => {
     setOpenDatePicker(false);
   };
 
+  const formatTime = (time) => {
+    const [hours, minutes] = time.split(':');
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const formattedHour = hour % 12 || 12;
+    return `${formattedHour}:${minutes} ${ampm}`;
+  };
+
   const renderModalItem = ({ item }) => (
     <TouchableOpacity
       style={styles.modalItem}
@@ -165,7 +173,7 @@ const SearchForm = ({ onSearch }) => {
         {modalType === "origin" && item.origin.en}
         {modalType === "destination" && item.destination.en}
         {modalType === "schedule" &&
-          item.label.en + " - " + item.departure_time}
+          `${formatTime(item.departure_time)} - ${item.label.en}`}
       </Text>
     </TouchableOpacity>
   );

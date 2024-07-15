@@ -14,7 +14,6 @@ import PaymentMethodCard from "../components/PaymentMethodCard";
 import BackArrow from "../assets/arrow-circle-left.png";
 import MtnLogo from "../assets/mtn_momo.png";
 import OrangeLogo from "../assets/orange_money.png";
-import StripeLogo from "../assets/stripe.jpg";
 import VisaLogo from "../assets/visa.png";
 
 const PaymentScreen = ({ route }) => {

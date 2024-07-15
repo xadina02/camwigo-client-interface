@@ -29,7 +29,7 @@ const ReservationScreen = ({ route }) => {
     // Initialize seats based on vehicle category size and reservations
     const initializeSeats = () => {
       const vehicleSize = journey.vehicle.vehicle_category.size;
-      const reservedSeats = journey.reservations.map(res => res.position);
+      const reservedSeats = journey.reservations.map((res) => res.position);
       const seatArray = [];
 
       for (let i = 1; i <= vehicleSize; i++) {
@@ -64,6 +64,12 @@ const ReservationScreen = ({ route }) => {
       } else {
         return [...prevSelectedSeats, seatNumber];
       }
+    });
+  };
+
+  const handleReserve = () => {
+    navigation.navigate("RegistrationScreen", {
+      journey: journey,
     });
   };
 
@@ -157,14 +163,7 @@ const ReservationScreen = ({ route }) => {
             ))}
           </ScrollView>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() =>
-            navigation.navigate("RegistrationScreen", {
-              journey: journey,
-            })
-          }
-        >
+        <TouchableOpacity style={styles.button} onPress={handleReserve}>
           <Text style={styles.buttonText}>
             <Image source={ReserveIcon} /> Reserve
           </Text>

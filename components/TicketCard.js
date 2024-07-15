@@ -41,10 +41,16 @@ const JourneyCard = ({ journey }) => {
 
       <JourneyFleetDetails journey={journey.reservation.vehicle_route_destination} statusValue={journey.status} seating={false} status={true} none={false}/>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("TicketDetailsScreen", {
-                journey: journey
-            })}>
-        <Text style={styles.buttonText}>View ticket ➔</Text>
+      <TouchableOpacity style={styles.button} onPress={handleNext}>
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color="#f5f5f5"
+            style={styles.loader}
+          />
+        ) : (
+          <Text style={styles.buttonText}>View ticket ➔</Text>
+        )}
       </TouchableOpacity>
     </View>
   );

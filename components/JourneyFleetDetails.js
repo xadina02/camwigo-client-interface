@@ -7,7 +7,7 @@ import ClockIcon from "../assets/clock.png";
 
 // const BusIcon = require('../assets/bus.svg');
 
-const JourneyFleetDetails = ({ journey, seating, status, none }) => {
+const JourneyFleetDetails = ({ journey, statusValue, seating, status, none }) => {
   const dateObj = new Date(journey.journey_date);
   const formattedDate = new Intl.DateTimeFormat('en-US', {
     weekday: 'short',
@@ -74,9 +74,9 @@ const JourneyFleetDetails = ({ journey, seating, status, none }) => {
           <>
             <View style={styles.detailBox}>
               <Text
-                style={journey.status === "used" ? styles.status : styles.type}
+                style={statusValue === "used" ? styles.status : styles.type}
               >
-                {journey.status.toUpperCase()}
+                {statusValue.toUpperCase()}
               </Text>
             </View>
           </>

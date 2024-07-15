@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -6,13 +6,26 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
-import dummyTickets from "../dummy/tickets";
 import TicketCard from "../components/TicketCard";
+import useGetTickets from "../utils/useGetTicket";
 
 export default TicketScreen = () => {
-  const [journeys, setJourneys] = useState(true);
-  // const [activeTab, setActiveTab] = useState("Ticket");
+  const [tickets, setTickets] = useState([]);
+  const appToken = "sekurity$227";
+  const { allTickets: allTickets, loading: loading } = useGetTickets(appToken);
+
+  useEffect(() => {
+    try {
+      setTickets(allTickets);
+    } catch (error) {
+      // Do something
+    }
+  }, [allTickets]);
+
+  // console.log('The tickets here: ', tickets);
+
   return (
     <>
       <SafeAreaView
@@ -24,14 +37,25 @@ export default TicketScreen = () => {
           <Text style={styles.header}>Your Ticket History</Text>
         </View>
         <View style={styles.container}>
-          {journeys ? (
+          {loading ? (
+            <View style={styles.loaderContainer}>
+              <ActivityIndicator
+                size="large"
+                color="#070C35"
+                style={styles.loader}
+              />
+            </View>
+          ) : tickets ? (
             <ScrollView
               style={styles.scrollView}
               showsVerticalScrollIndicator={false}
             >
-              {dummyTickets.map((journey) => (
+              {tickets.map((ticket) => (
                 // <View style={styles.separator} key={journey.id}>
-                <TicketCard key={journey.id} journey={journey} />
+                <TicketCard
+                  key={ticket.id}
+                  journey={ticket}
+                />
                 // </View>
               ))}
             </ScrollView>
@@ -78,5 +102,8 @@ const styles = StyleSheet.create({
     color: "#A6A6A6",
     textAlign: "center",
     marginTop: 200,
+  },
+  loader: {
+    marginTop: "40%",
   },
 });

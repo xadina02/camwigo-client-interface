@@ -216,12 +216,22 @@ export const API = {
 
   /**
    * API request to get all tickets
-   * @param token
    * @param security
    * @returns
    */
-  getAllTickets: async (token, security) => {
-    const res = await API.execute("tickets", "GET", null, token, security);
+  getAllTickets: async (security) => {
+    const res = await API.execute("tickets/all", "GET", null, null, security);
+    return res;
+  },
+
+  /**
+   * API request to get all tickets
+   * @param reservationId
+   * @param security
+   * @returns
+   */
+  getTicket: async (reservationId, security) => {
+    const res = await API.execute(`tickets/${reservationId}`, "GET", null, null, security);
     return res;
   },
 };

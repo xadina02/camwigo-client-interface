@@ -31,6 +31,8 @@ const MyHomeScreen = () => {
     }
   }, [topTravelJourneys]);
 
+  // console.log('The journeys here: ', journeys);
+
   const handleSearch = async (searchParams) => {
     navigation.navigate("ListScreen", {
       searchParams,

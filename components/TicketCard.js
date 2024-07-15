@@ -1,23 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import BusIcon from '../assets/bus.png'
-import Line from '../assets/Line.jpg'
 import JourneyFleetDetails from './JourneyFleetDetails'
+import useGetTicketDetails from "../utils/useGetTicketDetail";
 import { useNavigation } from '@react-navigation/native'
 
 const JourneyCard = ({ journey }) => {
   const navigation = useNavigation();
+  const baseUrl = "http://192.168.154.124:8000";
+  const imageBaseUrl = `${baseUrl}/storage`;
+  const imageIconLink = `${imageBaseUrl}${journey.reservation.vehicle_route_destination.vehicle.vehicle_category.icon_link}`;
+  const [theTicketDetails, setTicketDetails] = useState(null);
+
+  const appToken = "sekurity$227";
+
+  const { ticketDetails, loading, fetchTicketDetails } =
+   useGetTicketDetails();
+
+  const handleNext = async () => {
+    await fetchTicketDetails(journey.reservation.id, appToken, (fetchedDetails) => {
+      setTicketDetails(fetchedDetails);
+      navigation.navigate("TicketDetailsScreen", {
+        journey: fetchedDetails,
+      });
+    });
+  };
+
+  useEffect(() => {
+    setTicketDetails(ticketDetails);
+  }, [ticketDetails]);
+
   return (
     <View style={styles.card}>
       <View style={styles.headerRow}>
         <View style={styles.vehicleInfo}>
-          <Image source={BusIcon} style={styles.vehicleIcon} />
-          <Text style={styles.vehicleName}>{journey.route}</Text>
+          <Image source={{ uri: imageIconLink }} style={styles.vehicleIcon} />
+          <Text style={styles.vehicleName}>{journey.reservation.vehicle_route_destination.vehicle.name}</Text>
         </View>
-        <Text style={styles.type}>{journey.type.toUpperCase()}</Text>
+        <Text style={styles.type}>{journey.reservation.vehicle_route_destination.vehicle.vehicle_category.name.en.toUpperCase()}</Text>
       </View>
 
-      <JourneyFleetDetails journey={journey} seating={false} status={true} none={false}/>
+      <JourneyFleetDetails journey={journey.reservation.vehicle_route_destination} statusValue={journey.status} seating={false} status={true} none={false}/>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("TicketDetailsScreen", {
                 journey: journey

@@ -22,7 +22,7 @@ const PaymentMethodCard = ({
   const navigation = useNavigation();
 
   const [accountNumber, setAccountNumber] = useState("");
-  const [amount, setAmount] = useState(data.fare);
+  const [amount, setAmount] = useState(data.route_schedule.route_destination.price);
   const [modalVisible, setModalVisible] = useState(false);
 
   const handlePay = () => {

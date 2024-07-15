@@ -16,7 +16,7 @@ const JourneyCard = ({ journey }) => {
   const { ticketDetails, loading, fetchTicketDetails } =
    useGetTicketDetails();
 
-  const handleNext = async () => {
+  const handleSeeDetails = async () => {
     await fetchTicketDetails(journey.reservation.id, appToken, (fetchedDetails) => {
       setTicketDetails(fetchedDetails);
       navigation.navigate("TicketDetailsScreen", {
@@ -41,7 +41,7 @@ const JourneyCard = ({ journey }) => {
 
       <JourneyFleetDetails journey={journey.reservation.vehicle_route_destination} statusValue={journey.status} seating={false} status={true} none={false}/>
 
-      <TouchableOpacity style={styles.button} onPress={handleNext}>
+      <TouchableOpacity style={styles.button} onPress={handleSeeDetails}>
         {loading ? (
           <ActivityIndicator
             size="large"

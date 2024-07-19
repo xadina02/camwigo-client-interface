@@ -18,6 +18,7 @@ import ReserveIcon from "../assets/reserve.png";
 import JourneyFleetDetails from "../components/JourneyFleetDetails";
 import SeatCard from "../components/SeatCard";
 import Delimiter from "../assets/delimiter.png";
+import useMakeReservation from "../utils/useMakeReservation";
 
 const ReservationScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -29,7 +30,7 @@ const ReservationScreen = ({ route }) => {
     // Initialize seats based on vehicle category size and reservations
     const initializeSeats = () => {
       const vehicleSize = journey.vehicle.vehicle_category.size;
-      const reservedSeats = journey.reservations.map((res) => res.position);
+      const reservedSeats = journey.reservations.map((res) => res.reservation_positions.seat_number);
       const seatArray = [];
 
       for (let i = 1; i <= vehicleSize; i++) {

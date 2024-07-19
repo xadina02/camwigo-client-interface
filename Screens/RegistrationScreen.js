@@ -8,12 +8,13 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  ActivityIndicator,
   TextInput,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../assets/arrow-circle-left.png";
 
-const RegistrationScreen = ({route}) => {
+const RegistrationScreen = ({ route }) => {
   const navigation = useNavigation();
   const { journey } = route.params;
 
@@ -27,7 +28,7 @@ const RegistrationScreen = ({route}) => {
     // Perform form validation and submission logic here
     navigation.navigate("PaymentScreen", {
       journey: journey,
-    })
+    });
   };
 
   return (
@@ -110,7 +111,15 @@ const RegistrationScreen = ({route}) => {
             keyboardType="email-address"
           />
           <TouchableOpacity style={styles.button} onPress={handleContinue}>
-            <Text style={styles.buttonText}>Continue ➔</Text>
+            {loading ? (
+              <ActivityIndicator
+                size="large"
+                color="#f5f5f5"
+                style={styles.loader}
+              />
+            ) : (
+              <Text style={styles.buttonText}>Continue ➔</Text>
+            )}
           </TouchableOpacity>
         </ScrollView>
       </View>
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
   },
   backArrowParent: {
     // backgroundColor: 'green',
-  },  
+  },
   backArrowContainer: {
     // position: "absolute",
     left: 8,
@@ -181,10 +190,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     // marginTop: '3%',
-    marginBottom: '5%',
+    marginBottom: "5%",
   },
   topperText: {
-    marginLeft: '5%',
+    marginLeft: "5%",
   },
   title: {
     // textAlign: "center",
@@ -218,18 +227,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   star: {
-    color: '#FF0B45',
+    color: "#FF0B45",
   },
   button: {
     backgroundColor: "#00103D",
     padding: 12,
     borderRadius: 20,
     alignItems: "center",
-    marginTop: '5%',
+    marginTop: "5%",
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  loader: {
+    height: 18.1
   },
 });
 

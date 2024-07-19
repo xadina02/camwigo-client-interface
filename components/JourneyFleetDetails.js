@@ -93,7 +93,7 @@ const JourneyFleetDetails = ({ journey, statusValue, seating, status, none }) =>
                 <Image source={CoinIcon} style={styles.fareIcon}></Image>
                 <Text style={styles.detailLabel2}>Fleet Fare</Text>
               </View>
-              <Text style={styles.fare}>{journey.route_schedule.route_destination.price}</Text>
+              <Text style={styles.fare}>XAF {journey.route_schedule.route_destination.price}</Text>
             </View>
           </View>
         </View>

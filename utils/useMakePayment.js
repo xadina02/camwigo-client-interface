@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { API } from "./fetcher";
 
-const useGetTravelJourneyDetails = () => {
-  const [travelJourneyDetails, setTravelJourneyDetails] = useState([]);
+const useMakePayment = () => {
+  const [payment, setPayment] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchTravelJourneyDetails = async (vehicleRouteDestinationId, security, callback) => {
+  const makePayment = async (reservationId, security, data, callback) => {
     setLoading(true);
     try {
-      const response = await API.getTravelJourneyDetails(vehicleRouteDestinationId, security);
+      const response = await API.makePayment(reservationId, data, security);
       const statusCode = response[0];
       const res = response[1];
       const status = response[2];
 
       if (status) {
-        setTravelJourneyDetails(res.data);
+        setPayment(res.data);
         if (callback) {
           callback(res.data);
         }
@@ -29,7 +29,7 @@ const useGetTravelJourneyDetails = () => {
     }
   };
 
-  return { travelJourneyDetails, loading, fetchTravelJourneyDetails };
+  return { payment, loading, makePayment };
 };
 
-export default useGetTravelJourneyDetails;
+export default useMakePayment;

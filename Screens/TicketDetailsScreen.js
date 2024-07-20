@@ -21,7 +21,7 @@ const TicketDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { journey } = route.params;
 
-  const { firstName,lastName } = useUserStore((state) => ({
+  const { firstName, lastName } = useUserStore((state) => ({
     firstName: state.firstName,
     lastName: state.lastName,
   }));
@@ -29,6 +29,10 @@ const TicketDetailsScreen = ({ route }) => {
   const baseUrl = "http://192.168.154.124:8000";
   const imageBaseUrl = `${baseUrl}/storage`;
   const imageIconLink = `${imageBaseUrl}${journey.QR_code_image_link}`;
+
+  const handleDownload = () => {
+    //
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -90,7 +94,11 @@ const TicketDetailsScreen = ({ route }) => {
             <View style={styles.positionBox}>
               <Text style={styles.positionLabel}>Position</Text>
               <View style={styles.detailBox}>
-                <Text style={styles.position}>{journey.position}</Text>
+                <Text
+                  style={styles.position}
+                >{`${journey.reservation.reservation_positions
+                  .map((position) => position.seat_number)
+                  .join(", ")}`}</Text>
               </View>
             </View>
           </View>
@@ -98,7 +106,7 @@ const TicketDetailsScreen = ({ route }) => {
             <Image source={{ uri: imageIconLink }} style={styles.qrCode} />
           </View>
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleDownload}>
           <Text style={styles.buttonText}>
             <Image source={DownloadIcon} style={styles.downloadIcon} /> Download
             Ticket
@@ -187,15 +195,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   ticketCut: {
-    backgroundColor: '#D9DBE7',
+    backgroundColor: "#D9DBE7",
     width: 25,
     height: 25,
     borderRadius: 15,
   },
   breaker: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: -10,
     marginBottom: -5,
   },

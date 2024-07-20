@@ -44,8 +44,6 @@ const PaymentMethodCard = ({
   const appToken = "sekurity$227";
 
   const handlePay = async () => {
-    console.log("Account Number:", accountNumber);
-    console.log("Amount to Pay:", totalPrice);
     setLoading(true)
     await makeReservation(
       accessToken,

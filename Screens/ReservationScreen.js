@@ -30,14 +30,14 @@ const ReservationScreen = ({ route }) => {
   const { accessToken } = useUserStore((state) => ({
     accessToken: state.accessToken,
   }));
-  const setReservation = useReservationStore(state => state.setReservation);
+  const setReservation = useReservationStore((state) => state.setReservation);
 
   useEffect(() => {
     // Initialize seats based on vehicle category size and reservations
     const initializeSeats = () => {
       const vehicleSize = journey.vehicle.vehicle_category.size;
-      const reservedSeats = journey.reservations.map(
-        (res) => res.reservation_positions.seat_number
+      const reservedSeats = journey.reservations.flatMap((res) =>
+        res.reservation_positions.map((pos) => pos.seat_number)
       );
       const seatArray = [];
 
@@ -78,7 +78,11 @@ const ReservationScreen = ({ route }) => {
 
   const handleReserve = async () => {
     if (selectedSeats.length > 0) {
-      setReservation(journey.id, selectedSeats, (journey.route_schedule.route_destination.price * selectedSeats.length))
+      setReservation(
+        journey.id,
+        selectedSeats,
+        journey.route_schedule.route_destination.price * selectedSeats.length
+      );
       if (accessToken == null) {
         navigation.navigate("RegistrationScreen");
       } else {

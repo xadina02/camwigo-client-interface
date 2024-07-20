@@ -1,15 +1,18 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 const useReservationStore = create(set => ({
   journeyId: null,
   seats: null,
-  setReservation: (journeyId, seats) => set({
+  totalPrice: null,
+  setReservation: (journeyId, seats, totalPrice) => set({
     journeyId: journeyId,
     seats: seats,
+    totalPrice: totalPrice,
   }),
   clearReservation: () => set({
     journeyId: null,
     seats: null,
+    totalPrice: null,
   }),
 }));
 

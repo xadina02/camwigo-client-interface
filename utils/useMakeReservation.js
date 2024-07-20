@@ -4,7 +4,7 @@ import { API } from "./fetcher";
 
 const useMakeReservation = () => {
   const [reservation, setReservation] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading1, setLoading] = useState(false);
 
   const makeReservation = async (token, vehicleRouteDestinationId, security, data, callback) => {
     setLoading(true);
@@ -29,7 +29,7 @@ const useMakeReservation = () => {
     }
   };
 
-  return { reservation, loading, makeReservation };
+  return { reservation, loading1, makeReservation };
 };
 
 export default useMakeReservation;

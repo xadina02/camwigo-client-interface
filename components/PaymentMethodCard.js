@@ -6,10 +6,15 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  ActivityIndicator,
   ScrollView,
 } from "react-native";
 import CustomModal from "../components/CustomModal";
 import { useNavigation } from "@react-navigation/native";
+import useMakeReservation from "../utils/useMakeReservation";
+import useMakePayment from "../utils/useMakePayment";
+import useReservationStore from "../zustand/useReservationStore";
+import useUserStore from "../zustand/useUserStore";
 import Delimiter from "../assets/delimiterForm.png";
 
 const PaymentMethodCard = ({
@@ -17,17 +22,54 @@ const PaymentMethodCard = ({
   paymentMethodName,
   isSelected,
   onCardSelect,
-  data,
 }) => {
   const navigation = useNavigation();
 
   const [accountNumber, setAccountNumber] = useState("");
-  const [amount, setAmount] = useState(data.route_schedule.route_destination.price);
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handlePay = () => {
+  const { reservation, loading1, makeReservation } = useMakeReservation();
+  const { payment, loading2, makePayment } = useMakePayment();
+  const { journeyId, seats, totalPrice } = useReservationStore((state) => ({
+    journeyId: state.journeyId,
+    seats: state.seats,
+    totalPrice: state.totalPrice,
+  }));
+  const { accessToken } = useUserStore((state) => ({
+    accessToken: state.accessToken,
+  }));
+  const clearReservation = useReservationStore(state => state.clearReservation);
+
+  const appToken = "sekurity$227";
+
+  const handlePay = async () => {
     console.log("Account Number:", accountNumber);
-    console.log("Amount to Pay:", amount);
+    console.log("Amount to Pay:", totalPrice);
+    setLoading(true)
+    await makeReservation(
+      accessToken,
+      journeyId,
+      appToken,
+      {
+        position: seats,
+      },
+      async (fetchedReservation) => {
+        await makePayment(
+          fetchedReservation.id,
+          appToken,
+          {
+            amount: totalPrice,
+          },
+          () => {
+            setLoading(false)
+            openModal()
+          }
+        );
+      }
+    );
+
+    // clearReservation()
   };
 
   const openModal = () => {
@@ -70,19 +112,25 @@ const PaymentMethodCard = ({
             <Text style={styles.label}>Amount to pay</Text>
             <TextInput
               style={styles.input}
-              value={amount}
-              onChangeText={setAmount}
-              placeholder="Enter amount"
+              value={totalPrice}
+              placeholder={`XAF ${totalPrice}`}
               keyboardType="numeric"
               editable={false}
               selectTextOnFocus={false}
             />
             <TouchableOpacity
               style={styles.payButton}
-              onPress={openModal}
-              // onPress={() => navigation.navigate("RegistrationScreen")}
+              onPress={handlePay}
             >
+              {loading ? (
+              <ActivityIndicator
+                size="large"
+                color="#f5f5f5"
+                style={styles.loader}
+              />
+            ) : (
               <Text style={styles.payButtonText}>Pay</Text>
+            )}
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -176,6 +224,9 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingVertical: 10,
     flexGrow: 1,
+  },
+  loader: {
+    height: 18.1,
   },
 });
 

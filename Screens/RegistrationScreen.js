@@ -13,22 +13,53 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../assets/arrow-circle-left.png";
+import useGetUser from "../utils/useGetUser";
+import useUserStore from "../zustand/useUserStore";
+import { toast } from "react-toastify";
 
-const RegistrationScreen = ({ route }) => {
+const RegistrationScreen = () => {
   const navigation = useNavigation();
-  const { journey } = route.params;
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [nin, setNin] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
+  const { accessToken } = useUserStore((state) => ({
+    accessToken: state.accessToken,
+  }));
 
-  const handleContinue = () => {
-    // Perform form validation and submission logic here
-    navigation.navigate("PaymentScreen", {
-      journey: journey,
-    });
+  const appToken = "sekurity$227";
+
+  const { loading, fetchUser } = useGetUser();
+
+  const handleContinue = async () => {
+    const data = {
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
+      email: email.trim(),
+      phone: phoneNumber.trim(),
+      NIN: nin.trim(),
+    };
+
+    // Client-side validation
+    if (!data.first_name || !data.last_name || !data.phone || !data.NIN) {
+      toast.error("All required fields must be filled.");
+      return;
+    }
+
+    console.log("Handle Continue Called with data: ", data);
+
+    await fetchUser(
+      data,
+      appToken, 
+    );
+
+    // Check the user data in the store
+    const userData = useUserStore.getState();
+    console.log("User Data after Registration: ", userData); // Add this line
+
+    navigation.navigate("PaymentScreen");
   };
 
   return (
@@ -241,7 +272,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   loader: {
-    height: 18.1
+    height: 18.1,
   },
 });
 

@@ -3,12 +3,11 @@ import { toast } from "react-toastify";
 import { API } from "./fetcher";
 import useUserStore from '../zustand/useUserStore';
 
-const useGetUser = (data, security) => {
+const useGetUser = () => {
   const [loading, setLoading] = useState(false);
   const setUser = useUserStore(state => state.setUser);
 
-  useEffect(() => {
-    const fetchUser = async () => {
+    const fetchUser = async (data, security, callback) => {
       setLoading(true);
       try {
         const response = await API.registerUser(data, security);
@@ -18,6 +17,9 @@ const useGetUser = (data, security) => {
 
         if (status) {
           setUser(res.data);
+          if (callback) {
+            callback(res.data);
+          }
         } else if (statusCode === 404) {
           toast.error(res.message);
         }
@@ -28,10 +30,7 @@ const useGetUser = (data, security) => {
       }
     };
 
-    fetchUser();
-  }, [data, security]);
-
-  return { user, loading };
+  return { loading, fetchUser };
 };
 
 export default useGetUser;

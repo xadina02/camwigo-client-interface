@@ -4,7 +4,7 @@ import { API } from "./fetcher";
 
 const useMakePayment = () => {
   const [payment, setPayment] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading2, setLoading] = useState(false);
 
   const makePayment = async (reservationId, security, data, callback) => {
     setLoading(true);
@@ -29,7 +29,7 @@ const useMakePayment = () => {
     }
   };
 
-  return { payment, loading, makePayment };
+  return { payment, loading2, makePayment };
 };
 
 export default useMakePayment;

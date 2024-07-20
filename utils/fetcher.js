@@ -58,9 +58,9 @@ export const API = {
    */
   registerUser: async (data, security) => {
     const res = await API.execute(
-      "/auth/register/",
+      "auth/register/",
       "POST",
-      JSON.stringify({ personalDetails: data }),
+      JSON.stringify(data),
       null,
       security
     );
@@ -189,7 +189,7 @@ export const API = {
     const res = await API.execute(
       `reservation/${vehicleRouteDestinationId}`,
       "POST",
-      JSON.stringify({ reservation: data }),
+      JSON.stringify(data),
       token,
       security
     );
@@ -207,7 +207,7 @@ export const API = {
     const res = await API.execute(
       `make-payment/${reservationId}`,
       "POST",
-      JSON.stringify({ paymentDetails: data }),
+      JSON.stringify(data),
       null,
       security
     );

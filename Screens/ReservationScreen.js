@@ -7,6 +7,7 @@ import {
   View,
   StyleSheet,
   StatusBar,
+  ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -18,19 +19,26 @@ import ReserveIcon from "../assets/reserve.png";
 import JourneyFleetDetails from "../components/JourneyFleetDetails";
 import SeatCard from "../components/SeatCard";
 import Delimiter from "../assets/delimiter.png";
-import useMakeReservation from "../utils/useMakeReservation";
+import useReservationStore from "../zustand/useReservationStore";
+import useUserStore from "../zustand/useUserStore";
 
 const ReservationScreen = ({ route }) => {
   const navigation = useNavigation();
   const { journey } = route.params;
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seats, setSeats] = useState([]);
+  const { accessToken } = useUserStore((state) => ({
+    accessToken: state.accessToken,
+  }));
+  const setReservation = useReservationStore(state => state.setReservation);
 
   useEffect(() => {
     // Initialize seats based on vehicle category size and reservations
     const initializeSeats = () => {
       const vehicleSize = journey.vehicle.vehicle_category.size;
-      const reservedSeats = journey.reservations.map((res) => res.reservation_positions.seat_number);
+      const reservedSeats = journey.reservations.map(
+        (res) => res.reservation_positions.seat_number
+      );
       const seatArray = [];
 
       for (let i = 1; i <= vehicleSize; i++) {
@@ -68,10 +76,15 @@ const ReservationScreen = ({ route }) => {
     });
   };
 
-  const handleReserve = () => {
-    navigation.navigate("RegistrationScreen", {
-      journey: journey,
-    });
+  const handleReserve = async () => {
+    if (selectedSeats.length > 0) {
+      setReservation(journey.id, selectedSeats, (journey.route_schedule.route_destination.price * selectedSeats.length))
+      if (accessToken == null) {
+        navigation.navigate("RegistrationScreen");
+      } else {
+        navigation.navigate("PaymentScreen");
+      }
+    }
   };
 
   return (
@@ -275,6 +288,9 @@ const styles = StyleSheet.create({
   column: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  loader: {
+    height: 18.1,
   },
 });
 

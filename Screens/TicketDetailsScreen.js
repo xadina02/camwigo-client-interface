@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import BackArrow from "../assets/arrow-circle-left.png";
 import JourneyFleetDetails from "../components/JourneyFleetDetails";
 import DownloadIcon from "../assets/download.png";
+import useUserStore from "../zustand/useUserStore";
 import ProfileIcon from "../assets/default_profile.png";
 import DashedLine from "../assets/dashed-line.png";
 import QrCode from "../assets/qr_code.png"; // Temporal
@@ -19,6 +20,15 @@ import QrCode from "../assets/qr_code.png"; // Temporal
 const TicketDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
   const { journey } = route.params;
+
+  const { firstName,lastName } = useUserStore((state) => ({
+    firstName: state.firstName,
+    lastName: state.lastName,
+  }));
+
+  const baseUrl = "http://192.168.154.124:8000";
+  const imageBaseUrl = `${baseUrl}/storage`;
+  const imageIconLink = `${imageBaseUrl}${journey.QR_code_image_link}`;
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -42,8 +52,8 @@ const TicketDetailsScreen = ({ route }) => {
           <View style={styles.profileContainer}>
             <Image source={ProfileIcon} style={styles.profileImage} />
             <View style={styles.userInfo}>
-              <Text style={styles.userName}>{journey.userName}</Text>
-              <Text style={styles.userType}>{journey.userType}</Text>
+              <Text style={styles.userName}>{`${firstName} ${lastName}`}</Text>
+              <Text style={styles.userType}>Passenger</Text>
             </View>
           </View>
           <View style={styles.breaker}>
@@ -53,7 +63,7 @@ const TicketDetailsScreen = ({ route }) => {
           </View>
           <View style={styles.fleetDetails}>
             <JourneyFleetDetails
-              journey={journey}
+              journey={journey.reservation.vehicle_route_destination}
               seating={false}
               status={false}
               none={true}
@@ -85,7 +95,7 @@ const TicketDetailsScreen = ({ route }) => {
             </View>
           </View>
           <View style={styles.qrCodeContainer}>
-            <Image source={QrCode} style={styles.qrCode} />
+            <Image source={{ uri: imageIconLink }} style={styles.qrCode} />
           </View>
         </View>
         <TouchableOpacity style={styles.button}>

@@ -219,8 +219,8 @@ export const API = {
    * @param security
    * @returns
    */
-  getAllTickets: async (security) => {
-    const res = await API.execute("tickets/all", "GET", null, null, security);
+  getAllTickets: async (token, security) => {
+    const res = await API.execute("tickets/all", "GET", null, token, security);
     return res;
   },
 
@@ -230,8 +230,8 @@ export const API = {
    * @param security
    * @returns
    */
-  getTicket: async (reservationId, security) => {
-    const res = await API.execute(`tickets/${reservationId}`, "GET", null, null, security);
+  getTicket: async (token, tokenId, security) => {
+    const res = await API.execute(`tickets/${tokenId}`, "GET", null, token, security);
     return res;
   },
 };

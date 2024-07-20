@@ -3,21 +3,25 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ActivityIndicator } fr
 import JourneyFleetDetails from './JourneyFleetDetails'
 import useGetTicketDetails from "../utils/useGetTicketDetail";
 import { useNavigation } from '@react-navigation/native'
+import useUserStore from "../zustand/useUserStore";
 
-const JourneyCard = ({ journey }) => {
+const JourneyCard = ({ ticket }) => {
   const navigation = useNavigation();
   const baseUrl = "http://192.168.154.124:8000";
   const imageBaseUrl = `${baseUrl}/storage`;
-  const imageIconLink = `${imageBaseUrl}${journey.reservation.vehicle_route_destination.vehicle.vehicle_category.icon_link}`;
+  const imageIconLink = `${imageBaseUrl}${ticket.reservation.vehicle_route_destination.vehicle.vehicle_category.icon_link}`;
   const [theTicketDetails, setTicketDetails] = useState(null);
 
+  const { accessToken } = useUserStore((state) => ({
+    accessToken: state.accessToken,
+  }));
   const appToken = "sekurity$227";
 
   const { ticketDetails, loading, fetchTicketDetails } =
    useGetTicketDetails();
 
   const handleSeeDetails = async () => {
-    await fetchTicketDetails(journey.reservation.id, appToken, (fetchedDetails) => {
+    await fetchTicketDetails(accessToken, ticket.id, appToken, (fetchedDetails) => {
       setTicketDetails(fetchedDetails);
       navigation.navigate("TicketDetailsScreen", {
         journey: fetchedDetails,
@@ -34,12 +38,12 @@ const JourneyCard = ({ journey }) => {
       <View style={styles.headerRow}>
         <View style={styles.vehicleInfo}>
           <Image source={{ uri: imageIconLink }} style={styles.vehicleIcon} />
-          <Text style={styles.vehicleName}>{journey.reservation.vehicle_route_destination.vehicle.name}</Text>
+          <Text style={styles.vehicleName}>{ticket.reservation.vehicle_route_destination.vehicle.name}</Text>
         </View>
-        <Text style={styles.type}>{journey.reservation.vehicle_route_destination.vehicle.vehicle_category.name.en.toUpperCase()}</Text>
+        <Text style={styles.type}>{ticket.reservation.vehicle_route_destination.vehicle.vehicle_category.name.en.toUpperCase()}</Text>
       </View>
 
-      <JourneyFleetDetails journey={journey.reservation.vehicle_route_destination} statusValue={journey.status} seating={false} status={true} none={false}/>
+      <JourneyFleetDetails journey={ticket.reservation.vehicle_route_destination} statusValue={ticket.status} seating={false} status={true} none={false}/>
 
       <TouchableOpacity style={styles.button} onPress={handleSeeDetails}>
         {loading ? (
@@ -111,6 +115,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 16,
+  },
+  loader: {
+    height: 18.1,
   },
 });
 

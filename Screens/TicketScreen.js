@@ -10,11 +10,15 @@ import {
 } from "react-native";
 import TicketCard from "../components/TicketCard";
 import useGetTickets from "../utils/useGetTicket";
+import useUserStore from "../zustand/useUserStore";
 
 export default TicketScreen = () => {
   const [tickets, setTickets] = useState([]);
+  const { accessToken } = useUserStore((state) => ({
+    accessToken: state.accessToken,
+  }));
   const appToken = "sekurity$227";
-  const { allTickets: allTickets, loading: loading } = useGetTickets(appToken);
+  const { allTickets: allTickets, loading: loading } = useGetTickets(accessToken, appToken);
 
   useEffect(() => {
     try {
@@ -54,7 +58,7 @@ export default TicketScreen = () => {
                 // <View style={styles.separator} key={journey.id}>
                 <TicketCard
                   key={ticket.id}
-                  journey={ticket}
+                  ticket={ticket}
                 />
                 // </View>
               ))}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { API } from "./fetcher";
 
-const useGetTickets = (security) => {
+const useGetTickets = (token, security) => {
   const [allTickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -10,7 +10,7 @@ const useGetTickets = (security) => {
     const fetchTickets = async () => {
       setLoading(true);
       try {
-        const response = await API.getAllTickets(security);
+        const response = await API.getAllTickets(token, security);
         const statusCode = response[0];
         const res = response[1];
         const status = response[2];

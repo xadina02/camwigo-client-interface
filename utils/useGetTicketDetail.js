@@ -6,10 +6,10 @@ const useGetTicketDetails = () => {
   const [ticketDetails, setTicketDetails] = useState([]);
   const [loading, setLoading] = useState(false);
 
-    const fetchTicketDetails = async (reservationId, security, callback) => {
+    const fetchTicketDetails = async (token, tokenId, security, callback) => {
       setLoading(true);
       try {
-        const response = await API.getTicket(reservationId, security);
+        const response = await API.getTicket(token, tokenId, security);
         const statusCode = response[0];
         const res = response[1];
         const status = response[2];

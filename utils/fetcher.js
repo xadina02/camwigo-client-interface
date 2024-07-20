@@ -203,12 +203,12 @@ export const API = {
    * @param security
    * @returns
    */
-  makePayment: async (reservationId, data, security) => {
+  makePayment: async (token, reservationId, data, security) => {
     const res = await API.execute(
       `make-payment/${reservationId}`,
       "POST",
       JSON.stringify(data),
-      null,
+      token,
       security
     );
     return res;

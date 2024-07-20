@@ -39,12 +39,14 @@ const PaymentMethodCard = ({
   const { accessToken } = useUserStore((state) => ({
     accessToken: state.accessToken,
   }));
-  const clearReservation = useReservationStore(state => state.clearReservation);
+  const clearReservation = useReservationStore(
+    (state) => state.clearReservation
+  );
 
   const appToken = "sekurity$227";
 
   const handlePay = async () => {
-    setLoading(true)
+    setLoading(true);
     await makeReservation(
       accessToken,
       journeyId,
@@ -53,21 +55,15 @@ const PaymentMethodCard = ({
         position: seats,
       },
       async (fetchedReservation) => {
-        await makePayment(
-          fetchedReservation.id,
-          appToken,
-          {
-            amount: totalPrice,
-          },
-          () => {
-            setLoading(false)
-            openModal()
-          }
-        );
+        await makePayment(accessToken, fetchedReservation.id, appToken, {
+          amount: totalPrice,
+          payment_method: paymentMethodName,
+          account_number: accountNumber
+        });
+        setLoading(false);
+        openModal();
       }
     );
-
-    // clearReservation()
   };
 
   const openModal = () => {
@@ -116,19 +112,16 @@ const PaymentMethodCard = ({
               editable={false}
               selectTextOnFocus={false}
             />
-            <TouchableOpacity
-              style={styles.payButton}
-              onPress={handlePay}
-            >
+            <TouchableOpacity style={styles.payButton} onPress={handlePay}>
               {loading ? (
-              <ActivityIndicator
-                size="large"
-                color="#f5f5f5"
-                style={styles.loader}
-              />
-            ) : (
-              <Text style={styles.payButtonText}>Pay</Text>
-            )}
+                <ActivityIndicator
+                  size="large"
+                  color="#f5f5f5"
+                  style={styles.loader}
+                />
+              ) : (
+                <Text style={styles.payButtonText}>Pay</Text>
+              )}
             </TouchableOpacity>
           </View>
         </ScrollView>

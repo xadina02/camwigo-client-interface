@@ -6,10 +6,10 @@ const useMakePayment = () => {
   const [payment, setPayment] = useState(null);
   const [loading2, setLoading] = useState(false);
 
-  const makePayment = async (reservationId, security, data, callback) => {
+  const makePayment = async (token, reservationId, security, data, callback) => {
     setLoading(true);
     try {
-      const response = await API.makePayment(reservationId, data, security);
+      const response = await API.makePayment(token, reservationId, data, security);
       const statusCode = response[0];
       const res = response[1];
       const status = response[2];

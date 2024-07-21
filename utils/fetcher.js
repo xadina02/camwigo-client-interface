@@ -18,7 +18,7 @@ export const API = {
 
     try {
       const response = await fetch(
-        `http://192.168.154.124:8000/api/v1/en/users/${url}`,
+        `http://192.168.103.124:8000/api/v1/en/users/${url}`,
         {
           method: method,
           headers,

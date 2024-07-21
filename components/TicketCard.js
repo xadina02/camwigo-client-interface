@@ -7,7 +7,7 @@ import useUserStore from "../zustand/useUserStore";
 
 const JourneyCard = ({ ticket }) => {
   const navigation = useNavigation();
-  const baseUrl = "http://192.168.154.124:8000";
+  const baseUrl = "http://192.168.103.124:8000";
   const imageBaseUrl = `${baseUrl}/storage`;
   const imageIconLink = `${imageBaseUrl}${ticket.reservation.vehicle_route_destination.vehicle.vehicle_category.icon_link}`;
   const [theTicketDetails, setTicketDetails] = useState(null);

@@ -9,6 +9,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+// import { captureRef } from "react-native-view-shot";
+// import RNFetchBlob from "rn-fetch-blob";
+// import PDFLib, { PDFDocument, PDFPage } from "react-native-pdf-lib";
 import BackArrow from "../assets/arrow-circle-left.png";
 import JourneyFleetDetails from "../components/JourneyFleetDetails";
 import DownloadIcon from "../assets/download.png";
@@ -26,12 +29,16 @@ const TicketDetailsScreen = ({ route }) => {
     lastName: state.lastName,
   }));
 
-  const baseUrl = "http://192.168.154.124:8000";
+  const baseUrl = "http://192.168.107.124:8000";
   const imageBaseUrl = `${baseUrl}/storage`;
   const imageIconLink = `${imageBaseUrl}${journey.QR_code_image_link}`;
 
-  const handleDownload = () => {
+  const generatePDF = async () => {
     //
+  };
+
+  const handleDownload = () => {
+    generatePDF();
   };
 
   return (

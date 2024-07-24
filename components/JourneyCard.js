@@ -3,12 +3,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, ActivityIndicator } fr
 import useGetTravelJourneyDetails from "../utils/useGetTravelJourneyDetail";
 import JourneyFleetDetails from "./JourneyFleetDetails";
 import { useNavigation } from "@react-navigation/native";
+import { BASE_URL, IMAGE_BASE_URL } from "../config";
 
 const JourneyCard = ({ journey }) => {
   const navigation = useNavigation();
-  const baseUrl = "http://192.168.103.124:8000";
-  const imageBaseUrl = `${baseUrl}/storage`;
-  const imageIconLink = `${imageBaseUrl}${journey.vehicle.vehicle_category.icon_link}`;
+  const imageIconLink = `${IMAGE_BASE_URL}${journey.vehicle.vehicle_category.icon_link}`;
   const [journeyDetails, setJourneyDetails] = useState(null);
 
   const appToken = "sekurity$227";

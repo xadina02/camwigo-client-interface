@@ -4,12 +4,11 @@ import JourneyFleetDetails from './JourneyFleetDetails'
 import useGetTicketDetails from "../utils/useGetTicketDetail";
 import { useNavigation } from '@react-navigation/native'
 import useUserStore from "../zustand/useUserStore";
+import { BASE_URL, IMAGE_BASE_URL } from "../config";
 
 const JourneyCard = ({ ticket }) => {
   const navigation = useNavigation();
-  const baseUrl = "http://192.168.103.124:8000";
-  const imageBaseUrl = `${baseUrl}/storage`;
-  const imageIconLink = `${imageBaseUrl}${ticket.reservation.vehicle_route_destination.vehicle.vehicle_category.icon_link}`;
+  const imageIconLink = `${IMAGE_BASE_URL}${ticket.reservation.vehicle_route_destination.vehicle.vehicle_category.icon_link}`;
   const [theTicketDetails, setTicketDetails] = useState(null);
 
   const { accessToken } = useUserStore((state) => ({

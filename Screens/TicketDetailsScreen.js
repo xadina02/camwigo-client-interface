@@ -19,6 +19,7 @@ import useUserStore from "../zustand/useUserStore";
 import ProfileIcon from "../assets/default_profile.png";
 import DashedLine from "../assets/dashed-line.png";
 import QrCode from "../assets/qr_code.png"; // Temporal
+import { BASE_URL, IMAGE_BASE_URL } from "../config";
 
 const TicketDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -29,9 +30,7 @@ const TicketDetailsScreen = ({ route }) => {
     lastName: state.lastName,
   }));
 
-  const baseUrl = "http://192.168.107.124:8000";
-  const imageBaseUrl = `${baseUrl}/storage`;
-  const imageIconLink = `${imageBaseUrl}${journey.QR_code_image_link}`;
+  const imageIconLink = `${IMAGE_BASE_URL}${journey.QR_code_image_link}`;
 
   const generatePDF = async () => {
     //
